@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container c-c">
+    <h2 class="h2-c">Preparate {{type}}</h2>
+</div>
+
+<div class="container container-text">
+    <div class="row">
+        <div class="tags-window col-lg-2 color-white">
+            <div class="page-header color-white" style="margin-top:0;">
+                <h2>Sort:</h2>
+            </div>
+            <div class="sort-overflow-scroll">
+                <form>
+                    {% for tag in tags %}
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="">{{tag.name}}</label>
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="products-window row">
+            {% for product in products %}
+                <div class="col-lg-4">
+                    <div class="card" >
+                        <img class="avatar avatar--xl" src="{{product.featured_image.url}}" />
+                        <div class="card__body">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{product.title}}</h4>
+                                    <p>Gramaj: {{product.gramaj}} gr</p>
+                                    <p>Pret: {{product.price}} ron</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
