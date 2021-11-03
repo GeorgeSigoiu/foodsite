@@ -32,9 +32,10 @@
                         <div class="card__body">
                             <div class="media">
                                 <div class="media-body">
-                                    <h4 class="media-heading">{{product.title}}</h4>
+                                    <h4 class="media-heading"><a href="{% url 'single-product' product.id %}">{{product.title}}</a></h4>
                                     <p>Gramaj: {{product.gramaj}} gr</p>
                                     <p>Pret: {{product.price}} ron</p>
+                                    <button class="btn btn--main--outline">Adauga in cos</button>
                                 </div>
                             </div>
                         </div>

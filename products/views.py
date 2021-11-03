@@ -3,9 +3,9 @@ from .models import Product, Content
 # Create your views here.
 
 
-def showProducts(request,type):
-    products = Product.objects.all()
-    contents = Content.objects.all()
+def showProducts(request, type):
+    products = Product.objects.filter(typeof=type)
+    contents = Content.objects.filter(typeof=type)
     context = {
         "products": products,
         "tags": contents,
@@ -15,4 +15,8 @@ def showProducts(request,type):
 
 
 def showSingleProduct(request, pk):
-    return render(request, "products/single-product.html")
+    product = Product.objects.get(id=pk)
+    context = {
+        'product': product,
+    }
+    return render(request, "products/single-product.html", context)

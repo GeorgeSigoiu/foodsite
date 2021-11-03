@@ -25,6 +25,7 @@ class Content(models.Model):
     name = models.CharField(max_length=200)
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
+    typeof = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name+"("+self.typeof+")"
