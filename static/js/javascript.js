@@ -11,7 +11,7 @@ window.addEventListener("scroll", function () {
 
 const dropdownPreparate = document.querySelector('.navbar .nav .dropdown .dropdown-toggle')
 const dropdownMenu = document.querySelector(".navbar .nav .dropdown .dropdown-menu")
-console.log(dropdownMenu.style)
+
 dropdownPreparate.addEventListener('mouseover', function () {
     dropdownMenu.style.display = 'block'
 })
@@ -27,15 +27,15 @@ dropdownMenu.addEventListener('mouseout', function () {
 
 const tagsWindow = document.querySelector('.tags-window')
 const productsWindow = document.querySelector('.products-window')
-const offsetEnd = productsWindow.offsetTop + productsWindow.offsetHeight - tagsWindow.offsetHeight
-const tagsOffsetTop = tagsWindow.offsetTop - 50
+if (productsWindow !== null) {
+    const offsetEnd = productsWindow.offsetTop + productsWindow.offsetHeight - tagsWindow.offsetHeight
+    const tagsOffsetTop = tagsWindow.offsetTop - 50
 
-console.log(tagsWindow.offsetTop)
-window.addEventListener('scroll', function () {
-    console.log(this.scrollY, tagsWindow.offsetTop)
-    if (this.scrollY > tagsOffsetTop && this.scrollY < offsetEnd)
-        tagsWindow.style.top = String(this.scrollY - tagsOffsetTop + 50) + 'px'
-})
+    window.addEventListener('scroll', function () {
+        if (this.scrollY > tagsOffsetTop && this.scrollY < offsetEnd)
+            tagsWindow.style.top = String(this.scrollY - tagsOffsetTop + 50) + 'px'
+    })
+}
 
 
 // $('#navbar a').on('click', function (event) {

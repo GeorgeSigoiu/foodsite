@@ -73,7 +73,7 @@ html{
 
 .card img{
     margin-left:25px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .sort-overflow-scroll{
     border-radius: 10px;
@@ -81,7 +81,6 @@ html{
     padding: 0px 10px;
     max-height: 200px;
     overflow-y: auto;
-    
 }
 .tags-window{
     position: relative;

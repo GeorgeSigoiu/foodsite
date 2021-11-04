@@ -4,11 +4,16 @@
 {% block content %}
 
 <div class="container c-c">
+    {% if "search" in type %}
+    <h2 class="h2-c">Rezultatele cautarii</h2>
+    {% else %}
     <h2 class="h2-c">Preparate {{type}}</h2>
+    {% endif %}
 </div>
 
 <div class="container container-text">
     <div class="row">
+        {% if "search" not in type %}
         <div class="tags-window col-lg-2 color-white">
             <div class="page-header color-white" style="margin-top:0;">
                 <h2>Sort:</h2>
@@ -23,19 +28,20 @@
                 </form>
             </div>
         </div>
+        {% endif %}
         <div class="col-lg-10">
             <div class="products-window row">
             {% for product in products %}
-                <div class="col-lg-4">
-                    <div class="card" >
-                        <img class="avatar avatar--xl" src="{{product.featured_image.url}}" />
+                <div class="col-lg-3">
+                    <div class="card" style="height: 350px;">
+                        <img class="avatar avatar--lg" src="{{product.featured_image.url}}" />
                         <div class="card__body">
                             <div class="media">
                                 <div class="media-body">
                                     <h4 class="media-heading"><a href="{% url 'single-product' product.id %}">{{product.title}}</a></h4>
-                                    <p>Gramaj: {{product.gramaj}} gr</p>
+                                    <p>Gramaj: {{product.quantity}} gr</p>
                                     <p>Pret: {{product.price}} ron</p>
-                                    <button class="btn btn--main--outline">Adauga in cos</button>
+                                    <button class="btn-add-cos btn btn--main--outline" id="{{product.id}}">Adauga in cos</button>
                                 </div>
                             </div>
                         </div>
@@ -46,5 +52,4 @@
         </div>
     </div>
 </div>
-
 {% endblock content %}

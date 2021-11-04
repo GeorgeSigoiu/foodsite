@@ -23,7 +23,46 @@
     {% block content %} 
     {% endblock content %} 
     {% include 'footer.html' %}
+    
     <script src="../static/js/javascript.js"></script>
+    <script>
+      
+    let market = []
+    const addToCosBtns = document.querySelectorAll('.btn-add-cos')
+    const badge = document.querySelector('.badge')
+    const cartBtn = document.querySelector('#show-products-market')
+
+    const sendProducts=function(){
+      $.ajax({
+            type: "POST",
+            url: '/transferBetweenDJandJS',
+            data: {
+                "market": market,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            dataType: "json",
+        });
+    }
+
+    addToCosBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+            market=[]
+            let contentBadge = badge.textContent;
+            if (contentBadge === "") contentBadge = 0;
+            else contentBadge = Number(contentBadge)
+            contentBadge += 1;
+            badge.textContent = contentBadge
+            market.push(btn.getAttribute('id'))
+            sendProducts()
+            
+        })
+    })
+    const numberOfProducts='{{numberOfProducts}}'
+    if(numberOfProducts>0)
+      badge.textContent=numberOfProducts
+    </script>
+    
     <script src="https://kit.fontawesome.com/5a450054d9.js" crossorigin="anonymous"></script>
+    
   </body>
 </html>

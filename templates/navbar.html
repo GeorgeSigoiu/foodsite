@@ -15,9 +15,9 @@
             <li><a href="{% url 'products' 'salata'%}">Salata</a></li>
           </ul>
         </li>
-        <li><a href="#">Oferte</a></li>
       </ul>
-      <form class="navbar-form navbar-left" action="/action_page.php">
+      <form class="navbar-form navbar-left" action="{% url 'products-search' %}" method="POST">
+        {% csrf_token %}
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Cauta" name="search">
           <div class="input-group-btn">
@@ -29,7 +29,13 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login / Sing up</a></li>
-        <li><a href="#"><i class="fas fa-shopping-cart"></i> Cos</a></li>
+        <li>
+          <a href="{% url 'show-products-cart' %}" id="show-products-market">
+            <i class="fas fa-shopping-cart"></i> 
+            Cos 
+            <span class="badge"></span>
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
