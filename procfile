@@ -1,1 +1,0 @@
-web: gunicorn laSes.wsgi --log-file - 
