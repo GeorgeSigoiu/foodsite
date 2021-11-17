@@ -28,14 +28,16 @@
     <script>
       
     let market = []
-    const addToCosBtns = document.querySelectorAll('.btn-add-cos')
+
+    const addToCartFoodBtns = document.querySelectorAll('.btn-add-cart-food')
+    const addToCartDrinksBtns = document.querySelectorAll('.btn-add-cart-drink')
     const badge = document.querySelector('.badge')
     const cartBtn = document.querySelector('#show-products-market')
 
     const sendProducts=function(){
       $.ajax({
             type: "POST",
-            url: '/transferBetweenDJandJS',
+            url: '/getProductsFromJS',
             data: {
                 "market": market,
                 'csrfmiddlewaretoken': '{{ csrf_token }}',
@@ -43,18 +45,28 @@
             dataType: "json",
         });
     }
-
-    addToCosBtns.forEach(btn => {
+    const updateBadge=function(){
+      let contentBadge = badge.textContent;
+          if (contentBadge === "") contentBadge = 0;
+          else contentBadge = Number(contentBadge)
+          contentBadge += 1;
+          badge.textContent = contentBadge
+    }
+    addToCartFoodBtns.forEach(btn => {
         btn.addEventListener("click", function () {
-            market=[]
-            let contentBadge = badge.textContent;
-            if (contentBadge === "") contentBadge = 0;
-            else contentBadge = Number(contentBadge)
-            contentBadge += 1;
-            badge.textContent = contentBadge
-            market.push(btn.getAttribute('id'))
-            sendProducts()
+          market=[]
+          updateBadge()
+          market.push(btn.getAttribute('id'))
+          sendProducts()
             
+        })
+    })
+    addToCartDrinksBtns.forEach(btn=>{
+        btn.addEventListener('click',function(){
+          market=[]
+          updateBadge()
+          market.push(btn.getAttribute('id'))
+          sendProducts()
         })
     })
     const numberOfProducts='{{numberOfProducts}}'
