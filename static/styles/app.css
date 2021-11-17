@@ -13,27 +13,33 @@ body{
 html{
     scroll-behavior: smooth;
 }
-/* Scroll bar------------ */
+/* Scroll bar---------------------------------------------- */
 /* width */
 ::-webkit-scrollbar {
     width: 13px;
+    /* width: 0px; */
   }
   
   /* Track */
   ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
+    /* box-shadow: inset 0 0 5px grey;  */
+    box-shadow: inset 0 0 5px transparent; 
     border-radius: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: gray; 
+    /* background: transparent;  */
     border-radius: 10px;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(92, 92, 92); 
+    /* background: transparent;  */
   }
 /* NAVBAR -----------------------------------------------------------------------------------*/
 .navbar-fixed-top{
@@ -52,6 +58,12 @@ html{
     background: #333 !important;
     color: white !important;
 }
+/* Footer ---------------------------------------------------------- */
+.open-location{
+    cursor: pointer;
+    color: lightseagreen;
+}
+
 /* Products -------------------------------------------------------- */
 .carousel-inner .item img{
     height: 94vh;
@@ -69,6 +81,7 @@ html{
 }
 .row{
     background-color: #333;
+    border-radius: 20px;
 }
 
 .card img{
@@ -114,10 +127,12 @@ html{
 }
 
 .container-fluid{
-    width:100%;
-    margin-left:auto;
-    margin-right: auto;
-    background-color: #333; 
+    width:100vw !important;
+    max-width:600rem !important;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left:0;
+    margin-right: 0; 
 }
 .transition-div{
     height: 40px;
@@ -137,4 +152,165 @@ html{
     color: black;
     font-size: 80px;
     mix-blend-mode:screen;
+}
+
+.bg-dark{
+    background-color: #333;
+}
+.bg-white{
+    background-color:whitesmoke;
+}
+/* Drinks carousel-------------------------------------- */
+#drinks-carousel{
+    margin-top:1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    border-radius: 20px;
+    /* display: flex;
+    flex-direction: row; */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+.drinks-carousel-content{
+    position: relative;
+    background-color: transparent;
+    overflow-x: hidden;
+    margin-left: 4rem;
+    margin-right: 4rem;
+}
+.drinks-carousel-card{
+    position: absolute;
+    transition:left 0.4s;
+    margin-top: 0;
+}
+.drinks-carousel-card h3{
+    margin-top: 0;
+}
+.drinks-carousel-arrow{
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 40%;
+}
+#drinks-carousel-arrow-left{
+    left: 10;
+}
+#drinks-carousel-arrow-right{
+    right: 0;
+    transform: translateX(-10px);
+}
+/* Checkout ------------------------------------------------------ */
+#progress-bar-checkout{
+    background-color: pink;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(100px);
+
+    padding: 1rem;
+}
+#content-checkout{
+    background-color: transparent;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 30px;
+}
+#content-checkout .page-header{
+    margin: 0;
+    font-size: 30px;
+}
+#progress-bar-checkout .circle-number{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    text-align: center;
+    width: 30px;
+    aspect-ratio: 1;
+    transform: scale(1.4);
+    transition: background-color 0.4s;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#progress-bar-checkout .circle-number:first-child{
+    background-color: aqua;
+}
+#progress-bar-checkout .number-conn{
+    width: 10px;
+    background-color: white;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid black;
+}
+#progress-bar-checkout .number-conn-inner{
+   background-color: black;
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 0;
+   transition:height 0.5s ease-in;
+   width: 100%;
+}
+#content-checkout .container-info{
+    padding: 1rem 1.7rem;
+    background-color: rgb(167, 25, 25);
+    color:black;
+    border: 2px solid black;
+    border-radius: 30px;
+    overflow: hidden;
+    transition: all 1s;
+}
+#content-checkout .container-products-info{
+    overflow: auto;
+    height: 72vh;
+}
+#content-checkout .container-order-info{
+    height: 50px;
+}
+#content-checkout .container-review-info{
+    height: 50px;
+}
+#content-checkout .card{
+    
+}
+#content-checkout .card__body{
+    padding: 0;
+    display: flex;
+}
+#content-checkout .card__body .quantity{
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#content-checkout .btn{
+    padding: 0 3px;
+}
+#content-checkout .card__body input{
+    margin: auto 0;
+    width: 50px;
+    padding-left:auto;
+}
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+#content-checkout .card__body p{
+    width: 300px;
+}
+#content-checkout .card__body img{
+    margin: 0;
+}
+#content-checkout .card__body h3{
+    margin: 0;
+    
+}
+.checkout-prev, .checkout-next{
+    color: #5bc0de;
+    cursor: pointer;
 }
