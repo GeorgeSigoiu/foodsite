@@ -1,8 +1,105 @@
 {% extends 'main.html' %}
 {% block content %}
-{% for product in products.items %}
-<h2 style="background: white;">
-    {{product}}
-</h2>
-{% endfor %}
+
+
+
+<div class="container bg-dark my" >
+    <!-- {% for product in products.items %}
+        <h2 style="background: white;">
+            {{product}}
+        </h2>
+    {% endfor %} -->
+    <div class="row">
+        <!-- <div class="btn btn-test-next">test+</div>
+        <div class="btn btn-test-prev">test-</div> -->
+
+        <div class="col-sm-2" id="progress-bar-checkout">
+            
+            <div class="circle-number">1</div>
+            <div class="number-conn">
+                <div class="number-conn-inner"></div>
+            </div>
+            <div class="circle-number">2</div>
+            <div class="number-conn">
+                <div class="number-conn-inner"></div>
+            </div>
+            <div class="circle-number">3</div>
+        </div>
+        <div class="col-sm-10" id="content-checkout">
+            <div class="container-info container-products-info">
+                <h2 class="container-title page-header">Produsele din cos</h2>
+                <div class="container-content">
+                    {% for product,number in products.items %}
+                    <div class="card">
+                        <div class="card__body">
+                          <img src="{{product.featured_image.url}}" style="width: 50px;" alt="photo">
+                          <p >
+                              {{product.title}}
+                              <br>
+                              {{product.quantity}} 
+                              {% if "pizza" in product.title|lower %} 
+                                gr  
+                              {% elif "burger" in product.title|lower %}
+                                gr
+                              {% elif "salata" in product.title|lower %}
+                                gr
+                              {% else %}
+                                ml
+                              {% endif %}
+                          </p>
+                          <div class="quantity">
+                            <button type="button" class="btn-incr btn btn-info">+</button>
+                            <input type="number" min="1" max="9" step="1" value="{{number}}">
+                            <button type="button" class="btn-decr btn btn-info">-</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    {% endfor %}
+
+                </div>
+                <ul class="pager">
+                    <!-- <li><span class="checkout-prev">Previous</span></li> -->
+                    <li><span class="checkout-next">Inainte</span></li>
+                </ul>
+            </div>
+            <div class=" container-info container-order-info ">
+                <h2 class="container-title page-header">Date personale & metoda plata</h2>
+                <div class="container-content">
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                    <p>a</p>
+                </div>
+                <ul class="pager">
+                    <li><span class="checkout-prev">Inapoi</span></li>
+                    <li><span class="checkout-next">Inainte</span></li>
+                </ul>
+            </div>
+            <div class="container-info container-review-info">
+                <h2 class="container-title page-header">Plaseaza comanda</h2>
+                <div class="container-content">
+                    
+                </div>
+                <ul class="pager">
+                    <li><span class="checkout-prev">Inapoi</span></li>
+                    <li><span class="checkout-next">Comanda</span></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</div>
+
 {% endblock content %}
