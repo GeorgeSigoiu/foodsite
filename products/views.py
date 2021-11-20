@@ -1,4 +1,3 @@
-import webbrowser
 from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from .models import Product, Content, Drink, Sauce
@@ -46,7 +45,7 @@ def showSingleProduct(request, pk):
         'product': product,
         "numberOfProducts": len(productsList),
     }
-    return render(request, "products/single-product.html", context=context)
+    return render(request, "products/single_product.html", context=context)
 
 
 def getProductsFromJS(request):
@@ -62,6 +61,7 @@ def deleteProductsFromJS(request):
 def productsSearch(request):
     global productsList
     search = request.POST.get("search", "")
+    print(request.POST)
     allProducts = Product.objects.all()
     drinks = Drink.objects.all()
     productsByName = getProductsByTitle(search.lower(), allProducts)
@@ -71,6 +71,7 @@ def productsSearch(request):
     products.extend(productsByContent)
     productsDistinct = Counter(products)
     contents = Content.objects.all()
+
     context = {
         "products": productsDistinct,
         "drinks": drinks,
@@ -78,8 +79,37 @@ def productsSearch(request):
         "type": "search",
         "numberOfProducts": len(productsList),
     }
+    print(productsDistinct)
+    if len(productsDistinct) == 0:
+        productsNotFoundMessage = "Nu s-au gasit rezultate pentru '"+search+"'!"
+        context["productsNotFound"] = productsNotFoundMessage
     return render(request, "products/products.html", context=context)
 
+
+def productsSort(request, type):
+    drinks = Drink.objects.all()
+    contents = Content.objects.filter(typeof=type)
+    allProducts = Product.objects.filter(typeof=type)
+    requestResult = list(request.POST.items())
+    products = []
+    enabledTags = []
+    for tagTitle, enabled in requestResult:
+        enabledTags.append(tagTitle)
+    for product in allProducts:
+        for tagTitle, enabled in requestResult:
+            content = product.content.filter(title=tagTitle)
+            if len(content) > 0:
+                products.append(product)
+    productsDistinct = set(products)
+    context = {
+        "products": productsDistinct,
+        "drinks": drinks,
+        "tags": contents,
+        "enabledTags": enabledTags,
+        "type": type,
+        "numberOfProducts": len(productsList),
+    }
+    return render(request, "products/products.html", context=context)
 # -------------------------------------------------------------
 
 
@@ -121,7 +151,7 @@ def getProductsByTitle(search, allProducts):
 def getProductsByContent(search, allProducts):
     result = []
     for prod in allProducts:
-        content = prod.content.filter(name__contains=search)
+        content = prod.content.filter(title__contains=search)
         if len(content) > 0:
             result.append(prod)
     return result

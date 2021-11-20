@@ -11,22 +11,24 @@
     {% endif %}
 </div>
 
-<div class="container">
+<div class="container"> 
     <div class="row">
         {% if "search" not in type %}
         <div class="tags-window col-lg-2 color-white">
             <div class="page-header color-white" style="margin-top:0;">
                 <h2>Sort:</h2>
             </div>
-            <div class="sort-overflow-scroll">
-                <form>
+            <form action="{% url 'products-sort' type %}" method="POST" id="sorting-products-tags" name="theForm">
+                {% csrf_token %}
+                <div class="sort-overflow-scroll">
                     {% for tag in tags %}
                     <div class="checkbox">
-                        <label><input type="checkbox" value="">{{tag.title}}</label>
+                        <label><input type="checkbox" name="{{tag.title}}">{{tag.title}}</label>
                     </div>
                     {% endfor %}
-                </form>
-            </div>
+                </div>
+                <input id="submit-sorting-products" class="btn btn--main" style="margin-top: 1rem;visibility: hidden;" type="submit" value="Cauta">
+            </form>
         </div>
         {% endif %}
         {% if 'search' not in type %}
@@ -35,6 +37,9 @@
         <div class="col-lg-12">
         {% endif %}
             <div class="products-window row">
+            {% if productsNotFound %}
+                <h2 class="products-not-found"">{{productsNotFound}}</h2>
+             {% endif %}
             {% for product in products %}
                 <div class="col-lg-3">
                     <div class="card" style="height: 350px;">
@@ -84,4 +89,33 @@
         <i class="fas fa-chevron-right fa-3x"></i>
     </div>
 </div>
+<script>
+    const checkboxes = document.querySelectorAll("#sorting-products-tags .checkbox label")
+
+    if (checkboxes) {
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("click", function () {
+                document.theForm.submit()
+            })
+        })
+    }
+    
+    let tags="{{enabledTags}}"
+    
+    if(tags.length>0){
+        tags=tags.replaceAll("&#x27;","").replaceAll("csrfmiddlewaretoken, ","").replace("[","").replace("]","")
+        const enabledTags=tags.split(", ")
+        
+        for(let j=0;j<checkboxes.length;j++){
+            for(let i=0;i<enabledTags.length;i++){
+                if(checkboxes[j].textContent===enabledTags[i]){
+                    console.log(1,checkboxes[j].querySelector("input"))
+                    checkboxes[j].querySelector("input").checked=true
+                    break
+                }
+            }
+        }
+    }
+    
+</script>
 {% endblock content %}
