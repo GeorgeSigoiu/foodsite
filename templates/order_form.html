@@ -1,8 +1,59 @@
 
-<form method="POST">
-    {% csrf_token %}
-    {% for info in information %}
-        <h3>{{info}}</h3>
-    {% endfor %}
-    
-</form>
+
+<div class="row" style="margin-top: 1rem;padding-bottom: 2rem;">
+    <div class="col-sm-7" style="border-right: 3px dotted white;">
+        <h3>Date personale</h2>
+        <form method="POST" action="#" id="order-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="form-group">
+                    <div class="form-inline">
+                        <div class="form-group form-animate">
+                            <label for="firstname" >Prenume:</label><br>
+                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Prenume">
+                        </div>
+                        <div class="form-group form-animate">
+                            <label for="surname" >Nume:</label><br>
+                            <input type="text" class="form-control" id="surname" name="surname" placeholder="Nume">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-animate">
+                    <label for="phone">Telefon:</label>
+                    <input type="text" class="form-control" style="max-width: 200px;" id="phone" name="phone" maxlength="12" size="12" placeholder="Telefon">
+                </div>
+                <div class="form-group form-animate">
+                    <label for="email"  >Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Adresa mail">
+                </div>
+                <div class="form-group">
+                    <label for="deliveryAddress">Adresa livrare:</label>
+                    <textarea class="form-control" rows="4" id="deliveryAddress" name="deliveryAddress"  placeholder="Adresa de livrare..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comentarii:</label>
+                    <textarea class="form-control" rows="2" id="comments" name="comments"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-5">
+        <h3>Metoda plata</h3>
+        <form>
+            <div class="form-group">
+                <div class="radio">
+                    <label class="checkout-p"><input type="radio" name="optradio">Plata la livrare</label>
+                  </div>
+                  <div class="radio">
+                    <label class="checkout-p"><input type="radio" name="optradio">Plata cu cardul online</label>
+                    <p class="checkout-p">Plata cu cardul se va efectua dupa trimiterea comenzii.</p>
+                  </div>
+            </div> 
+        </form>
+        <h3>Cost livrare</h3>
+        <p class="checkout-p">- Livrator magazin: 10.00 lei</p>
+        <p class="checkout-p">Livrarea este gratis daca comanda depaseste pretul de 60 lei.</p>
+    </div>
+
+  </div>
+
