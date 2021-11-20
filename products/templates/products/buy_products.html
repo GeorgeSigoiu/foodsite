@@ -3,13 +3,13 @@
 
 
 
-<div class="container bg-dark my" >
+<div class="container bg-dark my" id="checkout">
     <!-- {% for product in products.items %}
         <h2 style="background: white;">
             {{product}}
         </h2>
     {% endfor %} -->
-    <div class="row">
+    <div class="row" >
         <!-- <div class="btn btn-test-next">test+</div>
         <div class="btn btn-test-prev">test-</div> -->
 
@@ -28,7 +28,7 @@
         <div class="col-sm-10" id="content-checkout">
             <div class="container-info container-products-info">
                 <h2 class="container-title page-header">Produsele din cos</h2>
-                <div class="container-content">
+                <div class="container-content page-header">
                     {% for product,number in products.items %}
                     <div class="card">
                         <div class="card__body">
@@ -47,16 +47,28 @@
                                 ml
                               {% endif %}
                           </p>
-                          <div class="quantity">
+                          <div class="quantity" style="font-size: 16px;">
                             <button type="button" class="btn-incr btn btn-info">+</button>
-                            <input type="number" min="1" max="9" step="1" value="{{number}}">
+                            <input type="number" min="1" max="9" step="1" value="{{number}}" id="{{product.id}}">
                             <button type="button" class="btn-decr btn btn-info">-</button>
                           </div>
+                          <p class="product-cost">
+                            <span class="product-cost-span">
+                                pret pe unitate: <span class="product-price">{{product.price}}</span> lei
+                            </span>
+                            <span class="product-cost-span">
+                                pret total: <span class="product-price-total"></span> lei
+                            </span>
+                            
+                          </p>
                         </div>
 
                       </div>
                     {% endfor %}
-
+                </div>
+                <div class="total-cost">
+                    <span class="span-text">Total: </span>
+                    <span class="span-text total-money"></span>
                 </div>
                 <ul class="pager">
                     <!-- <li><span class="checkout-prev">Previous</span></li> -->
@@ -66,22 +78,7 @@
             <div class=" container-info container-order-info ">
                 <h2 class="container-title page-header">Date personale & metoda plata</h2>
                 <div class="container-content">
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
-                    <p>a</p>
+                    
                 </div>
                 <ul class="pager">
                     <li><span class="checkout-prev">Inapoi</span></li>
