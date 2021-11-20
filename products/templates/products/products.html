@@ -99,7 +99,7 @@
             })
         })
     }
-    
+
     let tags="{{enabledTags}}"
     
     if(tags.length>0){
@@ -109,7 +109,6 @@
         for(let j=0;j<checkboxes.length;j++){
             for(let i=0;i<enabledTags.length;i++){
                 if(checkboxes[j].textContent===enabledTags[i]){
-                    console.log(1,checkboxes[j].querySelector("input"))
                     checkboxes[j].querySelector("input").checked=true
                     break
                 }

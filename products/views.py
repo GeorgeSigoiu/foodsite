@@ -61,7 +61,6 @@ def deleteProductsFromJS(request):
 def productsSearch(request):
     global productsList
     search = request.POST.get("search", "")
-    print(request.POST)
     allProducts = Product.objects.all()
     drinks = Drink.objects.all()
     productsByName = getProductsByTitle(search.lower(), allProducts)
@@ -79,7 +78,6 @@ def productsSearch(request):
         "type": "search",
         "numberOfProducts": len(productsList),
     }
-    print(productsDistinct)
     if len(productsDistinct) == 0:
         productsNotFoundMessage = "Nu s-au gasit rezultate pentru '"+search+"'!"
         context["productsNotFound"] = productsNotFoundMessage
