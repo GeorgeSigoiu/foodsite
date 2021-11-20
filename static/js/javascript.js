@@ -245,7 +245,9 @@ if (document.querySelector("#content-checkout") !== null) {
             setHeightOverflow("72vh", "auto", reviewInfoContainer)
             setHeightOverflow("50px", "hidden", orderInfoContainer)
         } else if (stage == 4) {
+            //no func call
             console.log("Plaseaza comanda")
+            return 1
         }
         func.call()
     }

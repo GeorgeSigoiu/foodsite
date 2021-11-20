@@ -9,6 +9,7 @@ urlpatterns = [
     path('show-products-cart/', views.showProductsCart, name="show-products-cart"),
     path('', views.showHomePage, name="home"),
     path('products_search/', views.productsSearch, name="products-search"),
+    path('products-sort/<str:type>', views.productsSort, name="products-sort"),
 
     url(r'^getProductsFromJS$', views.getProductsFromJS,
         name='getProductsFromJS'),

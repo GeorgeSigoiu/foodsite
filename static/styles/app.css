@@ -105,6 +105,11 @@ html{
     margin-top: 3rem;
 }
 /* UTILITIES-------------------------------- */
+.products-not-found{
+    color: white;
+    margin: 0;
+    margin-left: 2rem;
+}
 .py{
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -200,6 +205,8 @@ html{
     transform: translateX(-10px);
 }
 /* Checkout ------------------------------------------------------ */
+
+
 #checkout {
     border-radius: 30px !important;
 }
@@ -327,9 +334,9 @@ input[type=number]::-webkit-inner-spin-button {
     font-size: 20px;
     font-weight: 500;
 }
-#content-checkout.product-cost{
+/* #content-checkout.product-cost{
     
 }
 #content-checkout.product-cost-p{
     
-}
+} */
