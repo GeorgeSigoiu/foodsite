@@ -12,4 +12,6 @@ urlpatterns = [
 
     url(r'^getProductsFromJS$', views.getProductsFromJS,
         name='getProductsFromJS'),
+    url(r'^deleteProductsFromJS$', views.deleteProductsFromJS,
+        name='deleteProductsFromJS'),
 ]
