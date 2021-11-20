@@ -1,5 +1,39 @@
 'use strict'
 
+let market = []
+
+const addToCartFoodBtns = document.querySelectorAll('.btn-add-cart-food')
+const addToCartDrinksBtns = document.querySelectorAll('.btn-add-cart-drink')
+const badge = document.querySelector('.badge')
+const cartBtn = document.querySelector('#show-products-market')
+
+const updateBadge = function () {
+    let contentBadge = badge.textContent;
+    if (contentBadge === "") contentBadge = 0;
+    else contentBadge = Number(contentBadge)
+    contentBadge += 1;
+    badge.textContent = contentBadge
+}
+addToCartFoodBtns.forEach(btn => {
+    btn.addEventListener("click", function () {
+        market = []
+        updateBadge()
+        market.push(btn.getAttribute('id'))
+        sendProducts(market)
+
+    })
+})
+addToCartDrinksBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+        market = []
+        updateBadge()
+        market.push(btn.getAttribute('id'))
+        sendProducts(market)
+    })
+})
+
+
+
 const navbar = document.querySelector('.navbar')
 window.addEventListener("scroll", function () {
     // navbar.classList.toggle("navbar-fixed-top", window.scrollY > 150)
@@ -94,26 +128,67 @@ if (document.querySelector('#drinks-carousel')) {
 
 // progress bar and completing informations to order
 if (document.querySelector("#content-checkout") !== null) {
+    // + and - buttons
     const btnsIncr = document.querySelectorAll("#content-checkout .quantity .btn-incr")
     const btnsDecr = document.querySelectorAll("#content-checkout .quantity .btn-decr")
     const quantityInputs = document.querySelectorAll("#content-checkout .quantity input")
+    // total cost for each product
+    const productTotalPriceSpans = document.querySelectorAll("#content-checkout .product-cost .product-price-total")
+    const productBasePriceSpans = document.querySelectorAll("#content-checkout .product-cost .product-price")
+    const totalMoneyToPay = document.querySelector("#content-checkout .total-cost .total-money")
 
+    const updatePrices = function (index) {
+        const basePrice = Number(productBasePriceSpans[index].textContent)
+        const quantity = Number(quantityInputs[index].value)
+        const totalPrice = basePrice * quantity
+        productTotalPriceSpans[index].textContent = totalPrice
+        return totalPrice
+    }
+
+    let finalPrice = 0
+    for (let i = 0; i < productTotalPriceSpans.length; i++) {
+        const totalPrice = updatePrices(i)
+        finalPrice += totalPrice
+    }
+    totalMoneyToPay.textContent = finalPrice + " lei"
     const updateQuantity = function (indx, val) {
         return function () {
             let currentQuantity = Number(quantityInputs[indx].value)
             currentQuantity += val
+            finalPrice += (val * Number(productBasePriceSpans[indx].textContent))
+            badge.textContent = Number(badge.textContent) + val
+            const id = quantityInputs[indx].getAttribute("id")
+            market.push(id)
+            if (val === 1) {
+                sendProducts(market)
+            } else {
+                let indx = market.indexOf(id)
+                if (indx > -1) {
+                    updateProducts(market)
+                }
+            }
+            market = []
+            totalMoneyToPay.textContent = finalPrice + " lei"
+            if (currentQuantity < 0) {
+                currentQuantity = 0
+                finalPrice += Number(productBasePriceSpans[indx].textContent)
+                badge.textContent = Number(badge.textContent) + 1
+                totalMoneyToPay.textContent = finalPrice + " lei"
+            }
             quantityInputs[indx].value = currentQuantity
+            updatePrices(indx)
         }
     }
 
     btnsIncr.forEach((btn, indx) => {
         btn.addEventListener("click", updateQuantity(indx, 1))
-
     })
+
     btnsDecr.forEach((btn, indx) => {
         btn.addEventListener("click", updateQuantity(indx, -1))
     })
 
+    // animation content-pages and left numbers
     let stage = 1
     const nextBtns = document.querySelectorAll("#content-checkout .pager .checkout-next")
     const prevBtns = document.querySelectorAll("#content-checkout .pager .checkout-prev")
@@ -124,58 +199,51 @@ if (document.querySelector("#content-checkout") !== null) {
 
     const numberConnectors = document.querySelectorAll(".number-conn-inner")
     const circleNumbers = document.querySelectorAll('.circle-number')
+
     let clicks = 0
+
+    const numConnStyle = function (indx, height, color, delay1, delay2) {
+        setTimeout(function () {
+            numberConnectors[indx].style.height = height
+        }, delay1)
+        setTimeout(function () {
+            circleNumbers[indx + 1].style.backgroundColor = color
+        }, delay2)
+    }
     const btnnextF = function () {
-        if (clicks == 0) {
-            clicks++
-            numberConnectors[0].style.height = '150%'
-            setTimeout(function () {
-                circleNumbers[1].style.backgroundColor = "aqua"
-            }, 400)
-        } else if (clicks == 1) {
-            clicks++
-            numberConnectors[1].style.height = '150%'
-            setTimeout(function () {
-                circleNumbers[2].style.backgroundColor = "aqua"
-            }, 400)
-        }
+        clicks++
+        numConnStyle(clicks - 1, "150%", "aqua", 0, 400)
     }
     const btnprevF = function () {
-        if (clicks == 1) {
-            clicks--
-            setTimeout(function () {
-                numberConnectors[0].style.height = '0'
-            }, 100)
-            circleNumbers[1].style.backgroundColor = "white"
-        } else if (clicks == 2) {
-            clicks--
-            setTimeout(function () {
-                numberConnectors[1].style.height = '0'
-            }, 100)
-            circleNumbers[2].style.backgroundColor = "white"
-        }
+        clicks--
+        numConnStyle(clicks, "0", "white", 100, 0)
+    }
+
+    const scrollTop = function (...elements) {
+        const myList = elements
+        myList.forEach(element => element.scrollTop = 0)
+    }
+    const setHeightOverflow = function (height, overflow, ...elements) {
+        const myList = elements
+        myList.forEach(element => {
+            element.style.overflow = overflow
+            element.style.height = height
+        })
     }
 
     const checkStage = function (func) {
         if (stage === 1) {
-            orderInfoContainer.scrollTop = 0;
-            productsInfoContainer.style.height = "72vh"
-            orderInfoContainer.style.height = "50px"
-            productsInfoContainer.style.overflow = "auto"
-            orderInfoContainer.style.overflow = "hidden"
+            scrollTop(orderInfoContainer)
+            setHeightOverflow("72vh", "auto", productsInfoContainer)
+            setHeightOverflow("50px", "hidden", orderInfoContainer)
         } else if (stage === 2) {
-            productsInfoContainer.scrollTop = 0;
-            reviewInfoContainer.scrollTop = 0;
-            productsInfoContainer.style.height = "50px"
-            orderInfoContainer.style.height = "72vh"
-            productsInfoContainer.style.overflow = "hidden"
-            orderInfoContainer.style.overflow = "auto"
+            scrollTop(productsInfoContainer, reviewInfoContainer)
+            setHeightOverflow("50px", "hidden", productsInfoContainer, reviewInfoContainer)
+            setHeightOverflow("72vh", "auto", orderInfoContainer)
         } else if (stage === 3) {
-            orderInfoContainer.scrollTop = 0;
-            orderInfoContainer.style.height = "50px"
-            reviewInfoContainer.style.height = "72vh"
-            orderInfoContainer.style.overflow = "hidden"
-            reviewInfoContainer.style.overflow = "auto"
+            scrollTop(orderInfoContainer)
+            setHeightOverflow("72vh", "auto", reviewInfoContainer)
+            setHeightOverflow("50px", "hidden", orderInfoContainer)
         } else if (stage == 4) {
             console.log("Plaseaza comanda")
         }

@@ -27,14 +27,11 @@
     <script src="../static/js/javascript.js"></script>
     <script>
       
-    let market = []
+    const numberOfProducts = '{{numberOfProducts}}'
+    if (numberOfProducts > 0)
+    badge.textContent = numberOfProducts
 
-    const addToCartFoodBtns = document.querySelectorAll('.btn-add-cart-food')
-    const addToCartDrinksBtns = document.querySelectorAll('.btn-add-cart-drink')
-    const badge = document.querySelector('.badge')
-    const cartBtn = document.querySelector('#show-products-market')
-
-    const sendProducts=function(){
+    const sendProducts=function(market){
       $.ajax({
             type: "POST",
             url: '/getProductsFromJS',
@@ -45,33 +42,19 @@
             dataType: "json",
         });
     }
-    const updateBadge=function(){
-      let contentBadge = badge.textContent;
-          if (contentBadge === "") contentBadge = 0;
-          else contentBadge = Number(contentBadge)
-          contentBadge += 1;
-          badge.textContent = contentBadge
+
+    const updateProducts=function(market){
+      $.ajax({
+            type: "POST",
+            url: '/deleteProductsFromJS',
+            data: {
+                "market": market,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            dataType: "json",
+        });
     }
-    addToCartFoodBtns.forEach(btn => {
-        btn.addEventListener("click", function () {
-          market=[]
-          updateBadge()
-          market.push(btn.getAttribute('id'))
-          sendProducts()
-            
-        })
-    })
-    addToCartDrinksBtns.forEach(btn=>{
-        btn.addEventListener('click',function(){
-          market=[]
-          updateBadge()
-          market.push(btn.getAttribute('id'))
-          sendProducts()
-        })
-    })
-    const numberOfProducts='{{numberOfProducts}}'
-    if(numberOfProducts>0)
-      badge.textContent=numberOfProducts
+
     </script>
     
     <script src="https://kit.fontawesome.com/5a450054d9.js" crossorigin="anonymous"></script>
