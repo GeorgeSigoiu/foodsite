@@ -1,0 +1,8 @@
+
+<form method="POST">
+    {% csrf_token %}
+    {% for info in information %}
+        <h3>{{info}}</h3>
+    {% endfor %}
+    
+</form>
