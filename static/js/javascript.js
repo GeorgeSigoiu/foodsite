@@ -137,6 +137,19 @@ if (document.querySelector("#content-checkout") !== null) {
     const productBasePriceSpans = document.querySelectorAll("#content-checkout .product-cost .product-price")
     const totalMoneyToPay = document.querySelector("#content-checkout .total-cost .total-money")
 
+    // animation content-pages and left numbers
+    let stage = 1
+    const nextBtns = document.querySelectorAll("#content-checkout .pager .checkout-next")
+    const prevBtns = document.querySelectorAll("#content-checkout .pager .checkout-prev")
+    const deliveryCost = document.getElementById("delivery-cost")
+
+    const productsInfoContainer = document.querySelector("#content-checkout .container-products-info")
+    const orderInfoContainer = document.querySelector("#content-checkout .container-order-info")
+    const reviewInfoContainer = document.querySelector("#content-checkout .container-review-info")
+
+    const numberConnectors = document.querySelectorAll(".number-conn-inner")
+    const circleNumbers = document.querySelectorAll('.circle-number')
+
     const updatePrices = function (index) {
         const basePrice = Number(productBasePriceSpans[index].textContent)
         const quantity = Number(quantityInputs[index].value)
@@ -177,6 +190,7 @@ if (document.querySelector("#content-checkout") !== null) {
             }
             quantityInputs[indx].value = currentQuantity
             updatePrices(indx)
+
         }
     }
 
@@ -189,16 +203,7 @@ if (document.querySelector("#content-checkout") !== null) {
     })
 
     // animation content-pages and left numbers
-    let stage = 1
-    const nextBtns = document.querySelectorAll("#content-checkout .pager .checkout-next")
-    const prevBtns = document.querySelectorAll("#content-checkout .pager .checkout-prev")
 
-    const productsInfoContainer = document.querySelector("#content-checkout .container-products-info")
-    const orderInfoContainer = document.querySelector("#content-checkout .container-order-info")
-    const reviewInfoContainer = document.querySelector("#content-checkout .container-review-info")
-
-    const numberConnectors = document.querySelectorAll(".number-conn-inner")
-    const circleNumbers = document.querySelectorAll('.circle-number')
 
     let clicks = 0
 
@@ -208,11 +213,15 @@ if (document.querySelector("#content-checkout") !== null) {
         }, delay1)
         setTimeout(function () {
             circleNumbers[indx + 1].style.backgroundColor = color
+            if (height === "0")
+                circleNumbers[indx + 1].style.boxShadow = "0px 0px 0px 0px rgb(35, 155, 224)"
+            else
+                circleNumbers[indx + 1].style.boxShadow = "0px 0px 5px 2px rgb(35, 155, 224)"
         }, delay2)
     }
     const btnnextF = function () {
         clicks++
-        numConnStyle(clicks - 1, "150%", "aqua", 0, 400)
+        numConnStyle(clicks - 1, "150%", "rgb(35, 155, 224)", 0, 400)
     }
     const btnprevF = function () {
         clicks--
@@ -252,6 +261,14 @@ if (document.querySelector("#content-checkout") !== null) {
         func.call()
     }
 
+    nextBtns[0].addEventListener("click", function () {
+        console.log(totalMoneyToPay)
+        if (Number(totalMoneyToPay.textContent.replace(" lei", "")) > 60)
+            deliveryCost.textContent = "- Livrator magazin: gratis"
+        else
+            deliveryCost.textContent = "- Livrator magazin: 10.00 lei"
+    })
+
     nextBtns.forEach(btn => {
         btn.addEventListener("click", function () {
             stage += 1
@@ -266,8 +283,74 @@ if (document.querySelector("#content-checkout") !== null) {
             checkStage(btnprevF)
         })
     })
-}
 
+    const orderFirstameInput = document.getElementById("order-firstname")
+    const orderSurameInput = document.getElementById("order-surname")
+    const orderEmailInput = document.getElementById("order-email")
+    const orderAddressInput = document.getElementById("order-address")
+    const orderPhoneInput = document.getElementById("order-phone")
+    const orderInfo = [orderFirstameInput, orderSurameInput, orderEmailInput, orderAddressInput, orderPhoneInput]
+
+    const checkProductExists = function () {
+        if (totalMoneyToPay.textContent === "0 lei")
+            return false
+        return true
+    }
+    const setBtnFunc = function (btn) {
+        return function () {
+            if (checkProductExists())
+                btn.classList.remove("disabled")
+            else
+                btn.classList.add("disabled")
+            console.log("+-")
+        }
+
+    }
+    if (productsInfoContainer.children[1].children.length > 0) {
+        nextBtns[0].classList.remove("disabled")
+    }
+    btnsDecr[0].addEventListener("click", setBtnFunc(nextBtns[0]))
+    btnsIncr[0].addEventListener("click", setBtnFunc(nextBtns[0]))
+
+    for (let i = 0; i < orderInfo.length; i++) {
+        const input = orderInfo[i]
+        console.log(input)
+        input.addEventListener("keyup", function () {
+            let ok = true
+            for (let j = 0; j < orderInfo.length; j++) {
+                const inp = orderInfo[j]
+                if (inp.value === "") ok = false
+            }
+            if (ok) nextBtns[1].classList.remove("disabled")
+            else nextBtns[1].classList.add("disabled")
+        })
+    }
+
+    document.getElementById("site-conditions").addEventListener("click", function () {
+        if (document.getElementById("site-conditions").checked)
+            nextBtns[2].classList.remove("disabled")
+        else nextBtns[2].classList.add("disabled")
+    })
+
+    const downloadBillBtn = document.getElementById("download-bill-btn")
+
+    if (downloadBillBtn) {
+
+        downloadBillBtn.addEventListener("click", function () {
+            document.getElementById("priceTotal").value = totalMoneyToPay.textContent.replace(" lei", "")
+            document.orderForm.submit()
+        })
+    }
+
+    document.getElementById("myModal").addEventListener("click", function (e) {
+        if (e.target === e.currentTarget || e.target.classList.contains("close") || e.target.id === 'closeModal') {
+            // close modal
+            // location.reload();
+            window.open("/")
+        }
+
+    })
+}
 
 // $('#navbar a').on('click', function (event) {
 //     if (this.hash !== '') {
