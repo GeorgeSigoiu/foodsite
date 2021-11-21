@@ -4,26 +4,27 @@
 
 
 <div class="container bg-dark my" id="checkout">
-    <!-- {% for product in products.items %}
-        <h2 style="background: white;">
-            {{product}}
-        </h2>
-    {% endfor %} -->
     <div class="row" >
-        <!-- <div class="btn btn-test-next">test+</div>
-        <div class="btn btn-test-prev">test-</div> -->
-
         <div class="col-sm-2" id="progress-bar-checkout">
             
-            <div class="circle-number">1</div>
+            <div class="circle-number">
+                1
+                <div class="step">Pasul</div>
+            </div>
             <div class="number-conn">
                 <div class="number-conn-inner"></div>
             </div>
-            <div class="circle-number">2</div>
+            <div class="circle-number">
+                2
+                <div class="step">Pasul</div>
+            </div>
             <div class="number-conn">
                 <div class="number-conn-inner"></div>
             </div>
-            <div class="circle-number">3</div>
+            <div class="circle-number">
+                3
+                <div class="step">Pasul</div>
+            </div>
         </div>
         <div class="col-sm-10" id="content-checkout">
             <div class="container-info container-products-info">
@@ -52,15 +53,16 @@
                             <input type="number" min="1" max="9" step="1" value="{{number}}" id="{{product.id}}">
                             <button type="button" class="btn-decr btn btn-info">-</button>
                           </div>
-                          <p class="product-cost">
+                        <p class="product-cost">
                             <span class="product-cost-span">
                                 pret pe unitate: <span class="product-price">{{product.price}}</span> lei
                             </span>
+                        </p>
+                        <p class="product-cost">
                             <span class="product-cost-span">
                                 pret total: <span class="product-price-total"></span> lei
                             </span>
-                            
-                          </p>
+                        </p>
                         </div>
 
                       </div>
@@ -71,8 +73,7 @@
                     <span class="span-text total-money"></span>
                 </div>
                 <ul class="pager">
-                    <!-- <li><span class="checkout-prev">Previous</span></li> -->
-                    <li><span class="checkout-next">Inainte</span></li>
+                    <li><span class="checkout-next disabled">Inainte <i class="fas fa-chevron-right"></i></span></li>
                 </ul>
             </div>
             <div class=" container-info container-order-info ">
@@ -81,22 +82,34 @@
                     {% include 'order_form.html' %} 
                 </div>
                 <ul class="pager">
-                    <li><span class="checkout-prev">Inapoi</span></li>
-                    <li><span class="checkout-next">Inainte</span></li>
+                    <li><span class="checkout-prev"><i class="fas fa-chevron-left"> </i> Inapoi</span></li>
+                    <li><span class="checkout-next disabled">Inainte <i class="fas fa-chevron-right"></i></span></li>
                 </ul>
             </div>
             <div class="container-info container-review-info">
                 <h2 class="container-title page-header">Plaseaza comanda</h2>
                 <div class="container-content">
+                    <div class="">
+                        <label for="conditions">
+                            <input type="checkbox" name="conditions" id="site-conditions">
+                            Accept termenii si conditiile!
+                        </label>
+                        <br>
+                        <label for="newsletter">
+                            <input type="checkbox" name="newsletter" id="subscribe-newsletter">
+                            Vreau sa ma abonez la newsletter!
+                        </label>
+                    </div>
                     
                 </div>
                 <ul class="pager">
-                    <li><span class="checkout-prev">Inapoi</span></li>
-                    <li><span class="checkout-next">Comanda</span></li>
+                    <li><span class="checkout-prev"><i class="fas fa-chevron-left"></i> Inapoi</span></li>
+                    <li><span class="checkout-next disabled" data-toggle="modal" data-target="#myModal">Comanda</span></li>
                 </ul>
             </div>
         </div>
       </div>
 </div>
+
 
 {% endblock content %}
