@@ -8,11 +8,20 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .models import Product, Content, Drink, Sauce
 from collections import Counter
+from django.template.loader import render_to_string
+import datetime
+# email
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 # Create your views here.
 
 productsDict = []
 productsList = []
 pdfResponseDownload = None
+rendered_string_from_html = None
 
 
 def showHomePage(request):
@@ -120,22 +129,97 @@ def productsSort(request, type):
 
 
 def prepareBill(request):
+    result = doWork(request)
+    requestDict = dict(request.POST)
+    sendEmail(trimString(requestDict["email"]))
+    return result
+
+
+def downloadBill(request):
+    doWork(request)
+    requestDict = dict(request.POST)
+    sendEmail(trimString(requestDict["email"]))
+    return redirect("/")
+
+# -------------------------------------------------------------
+
+
+def sendEmail(receiverEmail):
+    body = '''Buna ziua,
+    Va multumim pentru comanda efectuata la noi!
+    Atasata aveti factura.
+    O zi frumoasa,
+    Echipa G.G.
+    '''
+    # put your email here
+    sender = 'pazvantialfredo@gmail.com'
+    # get the password in the gmail (manage your google account, click on the avatar on the right)
+    # then go to security (right) and app password (center)
+    # insert the password and then choose mail and this computer and then generate
+    # copy the password generated here
+    password = 'tlbxatzunohicfxz'
+    # put the email of the receiver here
+    receiver = receiverEmail
+
+    # Setup the MIME
+    message = MIMEMultipart()
+    message['From'] = sender
+    message['To'] = receiver
+    message['Subject'] = 'This email has an attacment, a pdf file'
+
+    message.attach(MIMEText(body, 'plain'))
+
+    global pdfResponseDownload
+    now = datetime.datetime.now()
+    timestamp = now.strftime('%Y-%m-%dT%H:%M:%S')
+    pdfname = ("factura-comanda-"+timestamp+".pdf").replace(":", "-")
+    resultFile = open(pdfname, "w+b")
+
+    # convert HTML to PDF
+    global rendered_string_from_html
+    pisa.CreatePDF(rendered_string_from_html, dest=resultFile)
+
+    # close output file
+    resultFile.close()
+
+    # open the file in bynary
+    binary_pdf = open(pdfname, 'rb')
+
+    payload = MIMEBase('application', 'octate-stream', Name=pdfname)
+    # payload = MIMEBase('application', 'pdf', Name=pdfname)
+    payload.set_payload((binary_pdf).read())
+
+    # enconding the binary into base64
+    encoders.encode_base64(payload)
+
+    # add header with pdf name
+    payload.add_header('Content-Decomposition', 'attachment', filename=pdfname)
+    message.attach(payload)
+
+    # use gmail with port
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+
+    # enable security
+    session.starttls()
+
+    # login with mail_id and password
+    session.login(sender, password)
+
+    text = message.as_string()
+    session.sendmail(sender, receiver, text)
+    session.quit()
+    print('Mail Sent')
+
+
+def doWork(request):
     global pdfResponseDownload
     requestDict = dict(request.POST)
     pdfResponseDownload = createBill(requestDict)
-    # send email TODO
     global productsDict
     global productsList
     productsList = []
     productsDict = []
     return pdfResponseDownload
-
-
-def downloadBill(request):
-    global pdfResponseDownload
-    return pdfResponseDownload
-
-# -------------------------------------------------------------
 
 
 def createBill(requestDict):
@@ -149,6 +233,16 @@ def createBill(requestDict):
     if int(totalPrice) > 60:
         deliveryCost = "0"
     global productsDict
+    global rendered_string_from_html
+    rendered_string_from_html = render_to_string('bill.html', {
+        'name': name,
+        'address': address,
+        'phone': phone,
+        'email': email,
+        'products': productsDict,
+        'productsPrice': totalPrice,
+        'deliveryCost': deliveryCost,
+    })
     pdf = render_to_pdf(
         'bill.html',
         {
@@ -163,7 +257,7 @@ def createBill(requestDict):
         }
     )
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="mypdf.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="delivery_order.pdf"'
     return response
 
 
@@ -177,7 +271,6 @@ def render_to_pdf(template_src, context_dict):
     context = dict(context_dict)
     html = template.render(context)
     result = StringIO.BytesIO()
-
     pdf = pisa.pisaDocument(StringIO.BytesIO(
         html.encode("utf-8")), result)
     if not pdf.err:
