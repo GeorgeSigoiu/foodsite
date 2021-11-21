@@ -187,6 +187,13 @@ html{
 .bg-white{
     background-color:whitesmoke;
 }
+
+.fs-16{
+    font-size: 16px !important;
+}
+.c-black{
+    color: black !important;
+}
 /* Drinks carousel-------------------------------------- */
 #drinks-carousel{
     margin-top:1rem;
@@ -371,9 +378,9 @@ input[type=number]::-webkit-inner-spin-button {
     font-weight: 500;
 }
 /* Form order----------------------------------- */
-.oreder-personal-info{
+/* .oreder-personal-info{
 
-}
+} */
 .order-pay-method .checkout-p{
     font-size: 18px;
 }
