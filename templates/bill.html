@@ -1,11 +1,87 @@
-<h1>BILL</h1>
-<h3>{{name}}</h3>
-<h4>{{phone}}</h4>
-<h4>{{email}}</h4>
-<h4>{{address}}</h4>
-<h4>total price {{productsPrice}} + delivery: {{deliveryCost}}</h4>
-{% for product,number in products.items %}
-    <h3>{{product.title}}</h3>
-    <p>{{number}}</p>
-    <p>{{product.price}} lei</p>
-{% endfor %}
+<head>
+<style>
+    @page {
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <!-- Content for Static Frame 'header_frame' -->
+    <div id="header_content">
+    	<h1 style="font-size: 30px;">WebsiteName</h1>
+    </div>
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">(c) - page <pdf:pagenumber>
+        of <pdf:pagecount>
+    </div>
+
+    <!-- HTML Content -->
+    <div style="font-size: 14px;">
+        website: www.localhost:8000.ro <br>
+        Strada Teodor Mihali 29, Marasti, Cluj-Napoca <br> 
+        Strada Sesului 33A, Manastur, Cluj-Napoca <br>
+        Telefon: 0364 990 / 0744 215 250 <br>
+        Relatii clienti: servicii.clienti@websitename.com
+    </div>
+    <p>
+        <br>
+        <br>
+    </p>
+    <table style="font-size: 14px;">
+    		<tr>
+                <td>Date facturare:</td>
+                <td>Data: {{timestamp}}</td>
+    		</tr>
+    		<tr>
+                <td>Nume: {{name}}</td>
+    		</tr>
+    		<tr>
+    			<td>Adresa: {{address}}</td>
+    		</tr>
+    		<tr>
+    			<td>Telefon: {{phone}}</td>
+    		</tr>
+    		<tr>
+    			<td>Email: {{email}}</td>
+    		</tr>
+
+    </table>
+
+    <hr>
+
+    <table style="font-size: 14px;">
+    	<tr>
+    		<th>Produs</th>
+    		<th>Pret unitar</th>
+    		<th>Cantitate</th>
+    		<th>Total</th>
+    	</tr>
+        {% for product,quantity,total in products %}
+    	<tr>
+ 
+    		<td>{{product.title}}</td>
+    		<td>{{product.price}} lei</td>
+    		<td>{{quantity}}</td>
+    		<td>{{total}} lei</td>
+    	</tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+    <p style="font-size: 14px;"><strong>Cost de livrare: {{deliveryCost}} lei</strong></p>
+    <p style="font-size: 14px;"><strong>Total: {{productsPrice}} lei</strong></p>
+</body>
+</html>
