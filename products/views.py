@@ -131,14 +131,14 @@ def productsSort(request, type):
 def prepareBill(request):
     result = doWork(request)
     requestDict = dict(request.POST)
-    sendEmail(trimString(requestDict["email"]))
+    # sendEmail(trimString(requestDict["email"]))
     return result
 
 
 def downloadBill(request):
     doWork(request)
     requestDict = dict(request.POST)
-    sendEmail(trimString(requestDict["email"]))
+    # sendEmail(trimString(requestDict["email"]))
     return redirect("/")
 
 # -------------------------------------------------------------
@@ -232,30 +232,29 @@ def createBill(requestDict):
     deliveryCost = "10"
     if int(totalPrice) > 60:
         deliveryCost = "0"
+    else:
+        totalPrice = int(totalPrice) + 10
     global productsDict
     global rendered_string_from_html
-    rendered_string_from_html = render_to_string('bill.html', {
+    now = datetime.datetime.now()
+    timestamp = now.strftime('%Y-%m-%d')
+    productsToShow = []
+    for product, number in productsDict.items():
+        tup = (product, number, product.price*number)
+        productsToShow.append(tup)
+    context = {
+        'pagesize': 'A4',
         'name': name,
         'address': address,
         'phone': phone,
         'email': email,
-        'products': productsDict,
+        'products': productsToShow,
         'productsPrice': totalPrice,
         'deliveryCost': deliveryCost,
-    })
-    pdf = render_to_pdf(
-        'bill.html',
-        {
-            'pagesize': 'A4',
-            'name': name,
-            'address': address,
-            'phone': phone,
-            'email': email,
-            'products': productsDict,
-            'productsPrice': totalPrice,
-            'deliveryCost': deliveryCost,
-        }
-    )
+        'timestamp': timestamp,
+    }
+    rendered_string_from_html = render_to_string('bill.html', context)
+    pdf = render_to_pdf('bill.html', context)
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="delivery_order.pdf"'
     return response
