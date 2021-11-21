@@ -385,7 +385,7 @@ input[type=number]::-webkit-inner-spin-button {
 .order-form-row{
     background-color: transparent;
 }
-#order-form{
+/* #order-form{
 
 }
 #order-form.form-group{
@@ -394,4 +394,4 @@ input[type=number]::-webkit-inner-spin-button {
 #order-form label{
     
 
-}
+} */
