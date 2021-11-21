@@ -334,10 +334,12 @@ if (document.querySelector("#content-checkout") !== null) {
 
     const downloadBillBtn = document.getElementById("download-bill-btn")
 
+    let submittedOrder = false
     if (downloadBillBtn) {
-
         downloadBillBtn.addEventListener("click", function () {
             document.getElementById("priceTotal").value = totalMoneyToPay.textContent.replace(" lei", "")
+            submittedOrder = true
+            document.orderForm.action = "/prepare_bill/"
             document.orderForm.submit()
         })
     }
@@ -346,7 +348,16 @@ if (document.querySelector("#content-checkout") !== null) {
         if (e.target === e.currentTarget || e.target.classList.contains("close") || e.target.id === 'closeModal') {
             // close modal
             // location.reload();
-            window.open("/")
+            if (!submittedOrder) {
+                document.getElementById("priceTotal").value = totalMoneyToPay.textContent.replace(" lei", "")
+                console.log("FORM SUBMITTED")
+                document.orderForm.action = "/download_bill/"
+                document.orderForm.submit()
+            }
+            setTimeout(function () {
+                window.open("/", "_self")
+            }, 300)
+
         }
 
     })
