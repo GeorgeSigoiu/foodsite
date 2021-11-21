@@ -54,6 +54,9 @@ html{
 .navbar{
     margin-bottom: 0;
 }
+.navbar a{
+    transition: all 0.3s !important;
+}
 .dropdown-menu a:hover{
     background: #333 !important;
     color: white !important;
@@ -65,22 +68,23 @@ html{
 }
 
 /* Products -------------------------------------------------------- */
+
 .carousel-inner .item img{
     height: 94vh;
 }
 
 .carousel-caption h3, .carousel-caption p{
-    background-color: #333;
+    background-color: rgba(3,3,3,0.8);
     width: 200px;
     margin: auto;
-    box-shadow: 0px 0px 15px 19px #333;
+    box-shadow: 0px 0px 15px 19px rgba(3,3,3,0.8);
     border-radius: 20px;
 }
 .avatar{
     border-radius: 10px !important;
 }
 .row{
-    background-color: #333;
+    /* background-color: rgba(3, 3, 3, 0.8); */
     border-radius: 20px;
 }
 
@@ -103,8 +107,26 @@ html{
     border-radius: 20px;
     margin-bottom: 3rem;
     margin-top: 3rem;
+    /* background-color: transparent !important; */
+}
+.products-window .card{
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+.products-window .card:hover{
+    box-shadow: 5px 5px 10px 3px #5aa5b9 !important;
+    transform: translate(-2px,-2px);
 }
 /* UTILITIES-------------------------------- */
+.disabled{
+    background: rgb(153, 153, 153) !important;
+    color: rgb(59, 59, 59) !important;
+    pointer-events:none;
+}
+.hide-input{
+    position: absolute;
+    z-index: -10;
+    visibility: hidden;
+}
 .products-not-found{
     color: white;
     margin: 0;
@@ -141,7 +163,7 @@ html{
 }
 .transition-div{
     height: 40px;
-    background: linear-gradient(to bottom,#333,#333,transparent);
+    background: linear-gradient(to bottom,rgba(3,3,3,0.8),rgba(3,3,3,0.8),rgba(3,3,3,0.8));
 }
 
 .c-c{
@@ -155,12 +177,12 @@ html{
     display: inline;
     background: white;
     color: black;
-    font-size: 80px;
+    font-size: 60px;
     mix-blend-mode:screen;
 }
 
 .bg-dark{
-    background-color: #333;
+    background-color: rgba(3, 3, 3, 0.8);
 }
 .bg-white{
     background-color:whitesmoke;
@@ -206,19 +228,17 @@ html{
 }
 /* Checkout ------------------------------------------------------ */
 
-
 #checkout {
     border-radius: 30px !important;
 }
 #progress-bar-checkout{
-    background-color: pink;
+    background-color: transparent;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transform: translateY(100px);
-
     padding: 1rem;
 }
 #content-checkout{
@@ -233,13 +253,13 @@ html{
 }
 #progress-bar-checkout .circle-number{
     background-color: white;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 50%;
     text-align: center;
     width: 30px;
     aspect-ratio: 1;
     transform: scale(1.4);
-    transition: background-color 0.4s;
+    transition: all 0.4s;
     position: relative;
     z-index: 10;
     display: flex;
@@ -247,7 +267,8 @@ html{
     align-items: center;
 }
 #progress-bar-checkout .circle-number:first-child{
-    background-color: aqua;
+    background-color: rgb(35, 155, 224);
+    box-shadow: 0px 0px 5px 2px rgb(35, 155, 224);
 }
 #progress-bar-checkout .number-conn{
     width: 10px;
@@ -255,20 +276,30 @@ html{
     height: 60px;
     position: relative;
     overflow: hidden;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
+.step{
+    position: absolute;
+    top: 16%;
+    left: -150%;
+    /* background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);   background-clip: text;
+    -webkit-background-clip: text; */
+    color: white;
+}
+
 #progress-bar-checkout .number-conn-inner{
-   background-color: black;
+   background-color: rgb(45, 135, 187);
    position: absolute;
    top: 0;
    left: 0;
    height: 0;
    transition:height 0.5s ease-in;
    width: 100%;
+   
 }
 #content-checkout .container-info{
     padding: 1rem 1.7rem;
-    background-color: rgb(167, 25, 25);
+    background-color: rgba(27, 79, 109, 0.8);
     color:black;
     border: 2px solid black;
     border-radius: 30px;
@@ -285,9 +316,7 @@ html{
 #content-checkout .container-review-info{
     height: 50px;
 }
-/* #content-checkout .card{
-    
-} */
+
 #content-checkout .card__body{
     padding: 0;
     display: flex;
@@ -321,9 +350,16 @@ input[type=number]::-webkit-inner-spin-button {
     
 }
 .checkout-prev, .checkout-next{
-    color: #5bc0de;
+    color: white;
     cursor: pointer;
     font-weight: 400;
+    background: linear-gradient(to right,#87d0e6,#1d8aac);
+    transition: all 0.4s;
+    background-size: 200% auto;
+}
+.checkout-prev:hover, .checkout-next:hover{
+    background-position: right center;
+    /* background: linear-gradient(to bottom right,magenta,green); */
 }
 .total-cost{
     text-align: end;
@@ -335,3 +371,27 @@ input[type=number]::-webkit-inner-spin-button {
     font-weight: 500;
 }
 /* Form order----------------------------------- */
+.oreder-personal-info{
+
+}
+.order-pay-method .checkout-p{
+    font-size: 18px;
+}
+.order-pay-method p{
+    font-size: 16px !important;
+    margin-left: 2rem;
+    color: black;
+}
+.order-form-row{
+    background-color: transparent;
+}
+#order-form{
+
+}
+#order-form.form-group{
+
+}
+#order-form label{
+    
+
+}
