@@ -1,4 +1,10 @@
 from django.http.response import JsonResponse
+import io as StringIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.http import HttpResponse
+from html import escape
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .models import Product, Content, Drink, Sauce
 from collections import Counter
@@ -6,6 +12,7 @@ from collections import Counter
 
 productsDict = []
 productsList = []
+pdfResponseDownload = None
 
 
 def showHomePage(request):
@@ -99,6 +106,8 @@ def productsSort(request, type):
             if len(content) > 0:
                 products.append(product)
     productsDistinct = set(products)
+    if len(productsDistinct) == 0:
+        return redirect("/products/"+type)
     context = {
         "products": productsDistinct,
         "drinks": drinks,
@@ -108,7 +117,72 @@ def productsSort(request, type):
         "numberOfProducts": len(productsList),
     }
     return render(request, "products/products.html", context=context)
+
+
+def prepareBill(request):
+    global pdfResponseDownload
+    requestDict = dict(request.POST)
+    pdfResponseDownload = createBill(requestDict)
+    # send email TODO
+    global productsDict
+    global productsList
+    productsList = []
+    productsDict = []
+    return pdfResponseDownload
+
+
+def downloadBill(request):
+    global pdfResponseDownload
+    return pdfResponseDownload
+
 # -------------------------------------------------------------
+
+
+def createBill(requestDict):
+    name = trimString(requestDict["firstname"]) + \
+        " "+trimString(requestDict["surname"])
+    address = trimString(requestDict["deliveryAddress"])
+    phone = trimString(requestDict["phone"])
+    email = trimString(requestDict["email"])
+    totalPrice = trimString(requestDict["priceTotal"])
+    deliveryCost = "10"
+    if int(totalPrice) > 60:
+        deliveryCost = "0"
+    global productsDict
+    pdf = render_to_pdf(
+        'bill.html',
+        {
+            'pagesize': 'A4',
+            'name': name,
+            'address': address,
+            'phone': phone,
+            'email': email,
+            'products': productsDict,
+            'productsPrice': totalPrice,
+            'deliveryCost': deliveryCost,
+        }
+    )
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="mypdf.pdf"'
+    return response
+
+
+def trimString(string):
+    result = str(string).replace("[", "").replace("]", "").replace("'", "")
+    return result
+
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = dict(context_dict)
+    html = template.render(context)
+    result = StringIO.BytesIO()
+
+    pdf = pisa.pisaDocument(StringIO.BytesIO(
+        html.encode("utf-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse("Error generating PDF file")
 
 
 def handleRequestFromJs(instruction, request):
