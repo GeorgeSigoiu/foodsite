@@ -1,0 +1,11 @@
+<h1>BILL</h1>
+<h3>{{name}}</h3>
+<h4>{{phone}}</h4>
+<h4>{{email}}</h4>
+<h4>{{address}}</h4>
+<h4>total price {{productsPrice}} + delivery: {{deliveryCost}}</h4>
+{% for product,number in products.items %}
+    <h3>{{product.title}}</h3>
+    <p>{{number}}</p>
+    <p>{{product.price}} lei</p>
+{% endfor %}
