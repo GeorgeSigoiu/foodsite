@@ -7,6 +7,7 @@ const addToCartDrinksBtns = document.querySelectorAll('.btn-add-cart-drink')
 const badge = document.querySelector('.badge')
 const cartBtn = document.querySelector('#show-products-market')
 
+// update the number of products existing in cart
 const updateBadge = function () {
     let contentBadge = badge.textContent;
     if (contentBadge === "") contentBadge = 0;
@@ -14,35 +15,29 @@ const updateBadge = function () {
     contentBadge += 1;
     badge.textContent = contentBadge
 }
-addToCartFoodBtns.forEach(btn => {
-    btn.addEventListener("click", function () {
-        market = []
-        updateBadge()
-        market.push(btn.getAttribute('id'))
-        sendProducts(market)
 
-    })
-})
-addToCartDrinksBtns.forEach(btn => {
-    btn.addEventListener('click', function () {
-        market = []
-        updateBadge()
-        market.push(btn.getAttribute('id'))
-        sendProducts(market)
-    })
+// when a new product is added in cart, it is send to backend to store in list
+let productCardElements = [addToCartFoodBtns, addToCartDrinksBtns]
+const addToCart = function () {
+    market = []
+    updateBadge()
+    market.push(btn.getAttribute('id'))
+    sendProducts(market)
+}
+productCardElements.forEach(element => {
+    element.forEach(button => button.addEventListener("click", addToCart))
 })
 
-
-
+// when scrolling the navbar gets fixed to top
 const navbar = document.querySelector('.navbar')
 window.addEventListener("scroll", function () {
-    // navbar.classList.toggle("navbar-fixed-top", window.scrollY > 150)
     if (window.scrollY > 150)
         navbar.classList.add('navbar-fixed-top')
     else
         navbar.classList.remove('navbar-fixed-top')
 })
 
+// dropmenu on navbar
 const dropdownPreparate = document.querySelector('.navbar .nav .dropdown .dropdown-toggle')
 const dropdownMenu = document.querySelector(".navbar .nav .dropdown .dropdown-menu")
 
@@ -59,6 +54,7 @@ dropdownMenu.addEventListener('mouseout', function () {
     dropdownMenu.style.display = 'none'
 })
 
+// moving tags window while scrolling 
 const tagsWindow = document.querySelector('.tags-window')
 const productsWindow = document.querySelector('.products-window')
 if (tagsWindow && productsWindow) {
@@ -73,6 +69,7 @@ if (tagsWindow && productsWindow) {
     }
 }
 
+// open location on map when click on the address string
 const openLocationLinks = document.querySelectorAll('.open-location')
 openLocationLinks.forEach(link => link.addEventListener('click', function () {
     const map_string = link.textContent
@@ -93,15 +90,22 @@ if (document.querySelector('#drinks-carousel')) {
     const carouselContainer = document.querySelector('.drinks-carousel-content')
     let maxHeight = 0
 
+    // initializing position for every drink element
+    // calculating the max height of a card
     drinkCards.forEach((card, index) => {
         card.style.left = `${cardWidth * index}px`
         if (card.offsetHeight > maxHeight)
             maxHeight = card.offsetHeight
     })
-    drinkCards.forEach((card, index) => {
+
+    // setting every card at max height
+    drinkCards.forEach(card => {
         card.style.height = `${maxHeight}px`
     })
+
     carouselContainer.style.height = `${maxHeight}px`
+
+    // moving card to left or to right when arrow is clicked
     const moveCards = function (offset) {
         drinkCards.forEach(card => {
             const currentPosition = card.offsetLeft
@@ -125,9 +129,8 @@ if (document.querySelector('#drinks-carousel')) {
     })
 }
 
-
-// progress bar and completing informations to order
-if (document.querySelector("#content-checkout") !== null) {
+// order window - progress bar and information about the order
+if (document.querySelector("#content-checkout")) {
     // + and - buttons
     const btnsIncr = document.querySelectorAll("#content-checkout .quantity .btn-incr")
     const btnsDecr = document.querySelectorAll("#content-checkout .quantity .btn-decr")
@@ -142,14 +145,15 @@ if (document.querySelector("#content-checkout") !== null) {
     const nextBtns = document.querySelectorAll("#content-checkout .pager .checkout-next")
     const prevBtns = document.querySelectorAll("#content-checkout .pager .checkout-prev")
     const deliveryCost = document.getElementById("delivery-cost")
+    const numberConnectors = document.querySelectorAll(".number-conn-inner")
+    const circleNumbers = document.querySelectorAll('.circle-number')
 
+    // containers for every stage
     const productsInfoContainer = document.querySelector("#content-checkout .container-products-info")
     const orderInfoContainer = document.querySelector("#content-checkout .container-order-info")
     const reviewInfoContainer = document.querySelector("#content-checkout .container-review-info")
 
-    const numberConnectors = document.querySelectorAll(".number-conn-inner")
-    const circleNumbers = document.querySelectorAll('.circle-number')
-
+    // updating the total price of products
     const updatePrices = function (index) {
         const basePrice = Number(productBasePriceSpans[index].textContent)
         const quantity = Number(quantityInputs[index].value)
@@ -164,47 +168,53 @@ if (document.querySelector("#content-checkout") !== null) {
         finalPrice += totalPrice
     }
     totalMoneyToPay.textContent = finalPrice + " lei"
+
+    // action when added or removed one product from cart
     const updateQuantity = function (indx, val) {
         return function () {
             let currentQuantity = Number(quantityInputs[indx].value)
             currentQuantity += val
+            // update the finbal price to pay
             finalPrice += (val * Number(productBasePriceSpans[indx].textContent))
+            totalMoneyToPay.textContent = finalPrice + " lei"
+            // update the products from cart
             badge.textContent = Number(badge.textContent) + val
+            // adding one more product to the products list
             const id = quantityInputs[indx].getAttribute("id")
             market.push(id)
-            if (val === 1) {
+
+            if (val === 1) { // if number of products is incremented
                 sendProducts(market)
-            } else {
+            } else { // if number of products is decremented
                 let indx = market.indexOf(id)
                 if (indx > -1) {
                     updateProducts(market)
                 }
             }
+            // reset the products which have to be added to products list
             market = []
-            totalMoneyToPay.textContent = finalPrice + " lei"
-            if (currentQuantity < 0) {
+
+            if (currentQuantity < 0) { // if we dont want this product anymore
                 currentQuantity = 0
+                // we have to add its value because we subtracted it before
                 finalPrice += Number(productBasePriceSpans[indx].textContent)
-                badge.textContent = Number(badge.textContent) + 1
                 totalMoneyToPay.textContent = finalPrice + " lei"
+                // and add +1 to the number of products because we deleted 1 before
+                badge.textContent = Number(badge.textContent) + 1
             }
+            // setting the current price
             quantityInputs[indx].value = currentQuantity
             updatePrices(indx)
-
         }
     }
-
     btnsIncr.forEach((btn, indx) => {
         btn.addEventListener("click", updateQuantity(indx, 1))
     })
-
     btnsDecr.forEach((btn, indx) => {
         btn.addEventListener("click", updateQuantity(indx, -1))
     })
 
-    // animation content-pages and left numbers
-
-
+    // setting the progress bar
     let clicks = 0
 
     const numConnStyle = function (indx, height, color, delay1, delay2) {
@@ -219,56 +229,53 @@ if (document.querySelector("#content-checkout") !== null) {
                 circleNumbers[indx + 1].style.boxShadow = "0px 0px 5px 2px rgb(35, 155, 224)"
         }, delay2)
     }
+    // when next button is pressed, go to next stage
     const btnnextF = function () {
         clicks++
         numConnStyle(clicks - 1, "150%", "rgb(35, 155, 224)", 0, 400)
     }
+    // when prev button is pressed, go to prev stage
     const btnprevF = function () {
         clicks--
         numConnStyle(clicks, "0", "white", 100, 0)
     }
-
-    const scrollTop = function (...elements) {
-        const myList = elements
-        myList.forEach(element => element.scrollTop = 0)
-    }
-    const setHeightOverflow = function (height, overflow, ...elements) {
-        const myList = elements
-        myList.forEach(element => {
+    // setting the containers height -> 50px to which are not currently used
+    //                               -> 72vh to the one in use
+    const setHeightOverflow = function (inUse, ...elements) {
+        height = inUse ? "72vh" : "50px"
+        overflow = inUse ? "auto" : hidden
+        elements.forEach(element => {
+            if (overflow === "hidden")
+                element.scrollTop = 0
             element.style.overflow = overflow
             element.style.height = height
         })
     }
-
+    // checking in which stage of placing order we are
     const checkStage = function (func) {
-        if (stage === 1) {
-            scrollTop(orderInfoContainer)
-            setHeightOverflow("72vh", "auto", productsInfoContainer)
-            setHeightOverflow("50px", "hidden", orderInfoContainer)
-        } else if (stage === 2) {
-            scrollTop(productsInfoContainer, reviewInfoContainer)
-            setHeightOverflow("50px", "hidden", productsInfoContainer, reviewInfoContainer)
-            setHeightOverflow("72vh", "auto", orderInfoContainer)
-        } else if (stage === 3) {
-            scrollTop(orderInfoContainer)
-            setHeightOverflow("72vh", "auto", reviewInfoContainer)
-            setHeightOverflow("50px", "hidden", orderInfoContainer)
+        if (stage === 1) { // when products are displayed
+            setHeightOverflow(true, productsInfoContainer)
+            setHeightOverflow(false, orderInfoContainer)
+        } else if (stage === 2) { // order information
+            setHeightOverflow(false, productsInfoContainer, reviewInfoContainer)
+            setHeightOverflow(true, orderInfoContainer)
+        } else if (stage === 3) { // review the information and accept terms and privacy
+            setHeightOverflow(true, reviewInfoContainer)
+            setHeightOverflow(false, orderInfoContainer)
         } else if (stage == 4) {
             //no func call
-            console.log("Plaseaza comanda")
             return 1
         }
         func.call()
     }
-
+    // checking if the delivery is free or not
     nextBtns[0].addEventListener("click", function () {
-        console.log(totalMoneyToPay)
         if (Number(totalMoneyToPay.textContent.replace(" lei", "")) > 60)
             deliveryCost.textContent = "- Livrator magazin: gratis"
         else
             deliveryCost.textContent = "- Livrator magazin: 10.00 lei"
     })
-
+    // going to next or prev stage
     nextBtns.forEach(btn => {
         btn.addEventListener("click", function () {
             stage += 1
@@ -284,13 +291,14 @@ if (document.querySelector("#content-checkout") !== null) {
         })
     })
 
+    // elements in review stage
     const orderFirstameInput = document.getElementById("order-firstname")
     const orderSurameInput = document.getElementById("order-surname")
     const orderEmailInput = document.getElementById("order-email")
     const orderAddressInput = document.getElementById("order-address")
     const orderPhoneInput = document.getElementById("order-phone")
     const orderInfo = [orderFirstameInput, orderSurameInput, orderEmailInput, orderAddressInput, orderPhoneInput]
-
+    // setting the elements with correct information from the form
     nextBtns[1].addEventListener("click", function () {
         document.getElementById("name-review-order").textContent = orderFirstameInput.value + " " + orderSurameInput.value
         document.getElementById("email-review-order").textContent = orderEmailInput.value
@@ -298,7 +306,7 @@ if (document.querySelector("#content-checkout") !== null) {
         document.getElementById("address-review-order").textContent = orderAddressInput.value
         document.getElementById("price-review-order").textContent = totalMoneyToPay.textContent
     })
-
+    //checking if there are some products to be bought
     const checkProductExists = function () {
         if (totalMoneyToPay.textContent === "0 lei")
             return false
@@ -310,19 +318,20 @@ if (document.querySelector("#content-checkout") !== null) {
                 btn.classList.remove("disabled")
             else
                 btn.classList.add("disabled")
-            console.log("+-")
         }
 
     }
     if (productsInfoContainer.children[1].children.length > 0) {
         nextBtns[0].classList.remove("disabled")
     }
+    // checking if is accepted to go from stage 1 to stage 2
     btnsDecr[0].addEventListener("click", setBtnFunc(nextBtns[0]))
     btnsIncr[0].addEventListener("click", setBtnFunc(nextBtns[0]))
 
+    // adding event listeners to inputs in the form
+    // checking if every input has some value
     for (let i = 0; i < orderInfo.length; i++) {
         const input = orderInfo[i]
-        console.log(input)
         input.addEventListener("keyup", function () {
             let ok = true
             for (let j = 0; j < orderInfo.length; j++) {
@@ -333,15 +342,15 @@ if (document.querySelector("#content-checkout") !== null) {
             else nextBtns[1].classList.add("disabled")
         })
     }
-
+    // checking if the terms and privacy are checked
     document.getElementById("site-conditions").addEventListener("click", function () {
         if (document.getElementById("site-conditions").checked)
             nextBtns[2].classList.remove("disabled")
         else nextBtns[2].classList.add("disabled")
     })
 
+    // if the user want to download the bill in pdf format
     const downloadBillBtn = document.getElementById("download-bill-btn")
-
     let submittedOrder = false
     if (downloadBillBtn) {
         downloadBillBtn.addEventListener("click", function () {
@@ -351,23 +360,18 @@ if (document.querySelector("#content-checkout") !== null) {
             document.orderForm.submit()
         })
     }
-
+    // checking if the user want to download the pdf format bill or just send the email with the bill
     document.getElementById("myModal").addEventListener("click", function (e) {
         if (e.target === e.currentTarget || e.target.classList.contains("close") || e.target.id === 'closeModal') {
-            // close modal
-            // location.reload();
             if (!submittedOrder) {
                 document.getElementById("priceTotal").value = totalMoneyToPay.textContent.replace(" lei", "")
-                console.log("FORM SUBMITTED")
                 document.orderForm.action = "/download_bill/"
                 document.orderForm.submit()
             }
             setTimeout(function () {
                 window.open("/", "_self")
             }, 300)
-
         }
-
     })
 }
 
