@@ -291,6 +291,14 @@ if (document.querySelector("#content-checkout") !== null) {
     const orderPhoneInput = document.getElementById("order-phone")
     const orderInfo = [orderFirstameInput, orderSurameInput, orderEmailInput, orderAddressInput, orderPhoneInput]
 
+    nextBtns[1].addEventListener("click", function () {
+        document.getElementById("name-review-order").textContent = orderFirstameInput.value + " " + orderSurameInput.value
+        document.getElementById("email-review-order").textContent = orderEmailInput.value
+        document.getElementById("phone-review-order").textContent = orderPhoneInput.value
+        document.getElementById("address-review-order").textContent = orderAddressInput.value
+        document.getElementById("price-review-order").textContent = totalMoneyToPay.textContent
+    })
+
     const checkProductExists = function () {
         if (totalMoneyToPay.textContent === "0 lei")
             return false
