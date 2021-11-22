@@ -18,14 +18,19 @@ const updateBadge = function () {
 
 // when a new product is added in cart, it is send to backend to store in list
 let productCardElements = [addToCartFoodBtns, addToCartDrinksBtns]
-const addToCart = function () {
-    market = []
-    updateBadge()
-    market.push(btn.getAttribute('id'))
-    sendProducts(market)
+const addToCart = function (btn) {
+    return function () {
+        market = []
+        updateBadge()
+        market.push(btn.getAttribute('id'))
+        sendProducts(market)
+    }
+
 }
 productCardElements.forEach(element => {
-    element.forEach(button => button.addEventListener("click", addToCart))
+    element.forEach(button => {
+        button.addEventListener("click", addToCart(button))
+    })
 })
 
 // when scrolling the navbar gets fixed to top
@@ -122,7 +127,6 @@ if (document.querySelector('#drinks-carousel')) {
         const carouselRight = carouselContainer.offsetLeft + carouselContainer.offsetWidth
         const lastCardRight = lastCard.offsetLeft + cardWidth
         if (lastCardRight - cardWidth * 2 >= carouselRight)
-
             moveCards(-(cardWidth * 2))
         else
             moveCards(carouselRight - lastCardRight - 55)
@@ -130,7 +134,7 @@ if (document.querySelector('#drinks-carousel')) {
 }
 
 // order window - progress bar and information about the order
-if (document.querySelector("#content-checkout")) {
+if (document.querySelector("#content-checkout") !== null) {
     // + and - buttons
     const btnsIncr = document.querySelectorAll("#content-checkout .quantity .btn-incr")
     const btnsDecr = document.querySelectorAll("#content-checkout .quantity .btn-decr")
@@ -242,8 +246,8 @@ if (document.querySelector("#content-checkout")) {
     // setting the containers height -> 50px to which are not currently used
     //                               -> 72vh to the one in use
     const setHeightOverflow = function (inUse, ...elements) {
-        height = inUse ? "72vh" : "50px"
-        overflow = inUse ? "auto" : hidden
+        const height = inUse ? "72vh" : "50px"
+        const overflow = inUse ? "auto" : "hidden"
         elements.forEach(element => {
             if (overflow === "hidden")
                 element.scrollTop = 0
