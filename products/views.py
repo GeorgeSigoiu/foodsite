@@ -24,14 +24,14 @@ pdfResponseDownload = None
 rendered_string_from_html = None
 
 
-def showHomePage(request):
+def showHomePage(request):  # home page
     context = {
         "numberOfProducts": len(productsList),
     }
     return render(request, "home.html", context=context)
 
 
-def showProductsCart(request):
+def showProductsCart(request):  # products intended to be bought
     global productsDict
     global productsList
     context = {
@@ -41,7 +41,7 @@ def showProductsCart(request):
     return render(request, "products/buy_products.html", context=context)
 
 
-def showProducts(request, type):
+def showProducts(request, type):  # show all products of type "type"
     products = Product.objects.filter(typeof=type)
     contents = Content.objects.filter(typeof=type)
     drinks = Drink.objects.all()
@@ -55,25 +55,32 @@ def showProducts(request, type):
     return render(request, "products/products.html", context=context)
 
 
-def showSingleProduct(request, pk):
+def showSingleProduct(request, pk):  # show informations about one product
     product = Product.objects.get(id=pk)
+    type1 = product.typeof
+    products = Product.objects.filter(
+        typeof=type1).exclude(title=product.title)
+    drinks = Drink.objects.all()
     context = {
         'product': product,
+        "products": products,
+        "drinks": drinks,
         "numberOfProducts": len(productsList),
     }
     return render(request, "products/single_product.html", context=context)
 
 
-def getProductsFromJS(request):
+def getProductsFromJS(request):  # getting products from javascript and adding to list
     response = handleRequestFromJs("append", request)
     return response
 
 
-def deleteProductsFromJS(request):
+def deleteProductsFromJS(request):  # deleting products from list
     response = handleRequestFromJs("delete", request)
     return response
 
 
+# showing the products containing search string in name or in its containings
 def productsSearch(request):
     global productsList
     search = request.POST.get("search", "")
@@ -86,7 +93,6 @@ def productsSearch(request):
     products.extend(productsByContent)
     productsDistinct = Counter(products)
     contents = Content.objects.all()
-
     context = {
         "products": productsDistinct,
         "drinks": drinks,
@@ -100,7 +106,7 @@ def productsSearch(request):
     return render(request, "products/products.html", context=context)
 
 
-def productsSort(request, type):
+def productsSort(request, type):  # showing the products which containg some tags
     drinks = Drink.objects.all()
     contents = Content.objects.filter(typeof=type)
     allProducts = Product.objects.filter(typeof=type)
@@ -128,14 +134,14 @@ def productsSort(request, type):
     return render(request, "products/products.html", context=context)
 
 
-def prepareBill(request):
+def prepareBill(request):  # preparing the bill and sending email
     result = doWork(request)
     requestDict = dict(request.POST)
     # sendEmail(trimString(requestDict["email"]))
     return result
 
 
-def downloadBill(request):
+def downloadBill(request):  # downloading the bill and sending email
     doWork(request)
     requestDict = dict(request.POST)
     # sendEmail(trimString(requestDict["email"]))
@@ -144,7 +150,7 @@ def downloadBill(request):
 # -------------------------------------------------------------
 
 
-def sendEmail(receiverEmail):
+def sendEmail(receiverEmail):  # sending the email
     body = '''Buna ziua,
     Va multumim pentru comanda efectuata la noi!
     Atasata aveti factura.
@@ -211,7 +217,7 @@ def sendEmail(receiverEmail):
     print('Mail Sent')
 
 
-def doWork(request):
+def doWork(request):  # creating the bill and initializing the pdf-bill
     global pdfResponseDownload
     requestDict = dict(request.POST)
     pdfResponseDownload = createBill(requestDict)
@@ -222,7 +228,7 @@ def doWork(request):
     return pdfResponseDownload
 
 
-def createBill(requestDict):
+def createBill(requestDict):  # creates the bill
     name = trimString(requestDict["firstname"]) + \
         " "+trimString(requestDict["surname"])
     address = trimString(requestDict["deliveryAddress"])
@@ -304,6 +310,7 @@ def handleRequestFromJs(instruction, request):
     return JsonResponse(data)
 
 
+# searching for products which contains a string in their names
 def getProductsByTitle(search, allProducts):
     result = []
     for product in allProducts:
@@ -312,6 +319,7 @@ def getProductsByTitle(search, allProducts):
     return result
 
 
+# searching from products which contains some tags
 def getProductsByContent(search, allProducts):
     result = []
     for prod in allProducts:
