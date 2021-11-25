@@ -194,6 +194,15 @@ html{
 .c-black{
     color: black !important;
 }
+.alert{
+    position: absolute;
+    top: 40px;
+    left: 0;
+    padding: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    visibility: hidden;
+}
 /* Drinks carousel-------------------------------------- */
 #drinks-carousel{
     margin-top:1rem;
@@ -346,6 +355,9 @@ html{
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
+input[type=number]{
+    text-align: center;
+}
 #content-checkout .card__body p{
     width: 300px;
 }
@@ -378,9 +390,6 @@ input[type=number]::-webkit-inner-spin-button {
     font-weight: 500;
 }
 /* Form order----------------------------------- */
-/* .oreder-personal-info{
-
-} */
 .order-pay-method .checkout-p{
     font-size: 18px;
 }
@@ -392,13 +401,132 @@ input[type=number]::-webkit-inner-spin-button {
 .order-form-row{
     background-color: transparent;
 }
-/* #order-form{
+/* Single product window ------------------------------ */
+
+.container-sg-prod{
+    background: rgba(255, 255, 255, 0.8);
+    color: #5bc0de;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 20px;
+    padding-top: 3rem;
+    padding-bottom:3rem ;
+}
+.product-template{
+    display: flex;
+}
+.product-image{
+    position: relative;
+    z-index: 30;
+    /* background: #2baad1; */
+    border-radius: 40px;
+    border:5px solid #5bc0de;
+    padding:8px;
+    margin-right: 3rem;
+}
+.image-div{
+    position: relative;
+    width: 400px;
+    aspect-ratio: 1;
+    margin: -1rem;
+    border: 5px solid #2baad1;
+    border-radius: 40px;
+}
+.product-title{
+    font-size: 30px;
+    color: white;
+    background: #1d8aac;
+    display: inline-block;
+    position: relative;
+    left:50px;
+    border-radius: 20px 20px 0 0;
+    padding: 0.4rem 1.3rem;
+    padding-bottom: 0;
+}
+.title-border-left,
+.title-border-right{
+    overflow: hidden;
+    position: absolute;
+    background: transparent;
+    bottom: -22px;
+    width: 30px;
+    aspect-ratio: 1;
+}
+.title-border-left{
+    left: -9px;
+}
+.title-border-right{
+    right: -9px;
+}
+.title-border-left:before,
+.title-border-right::before{
+    content: "";
+    position: absolute;
+    bottom: 15px;
+    background: transparent;
+    width: 30px;
+    aspect-ratio: 1;
+    border-radius: 20px;
+
+    border:7px solid #1d8aac;
+}
+.title-border-left:before{
+    left: -15px;
 
 }
-#order-form.form-group{
-
+.title-border-right:before{
+    right: -15px;
 }
-#order-form label{
-    
-
-} */
+.quantity-btn{
+    padding: 0 0.7rem;
+    font-size: 20px;
+    background: #555;
+    color: white;
+}
+.sg-prod-input{
+    font-size: 15px;
+    padding: 2px 0;
+    color: black;
+}
+.delivery-info{
+    padding: 1rem;
+    margin-left: -10px;
+    border-radius: 20px;
+    background: rgba(81, 222, 247, 0.8);
+    margin-bottom: 3rem;
+    margin-right: 3.2rem;
+}
+.delivery-info p i{
+    font-size: 20px;
+}
+.delivery-info > p{
+    font-size: 18px;
+    color: black;
+}
+.primary-attr > p{
+    font-size: 22px;
+}
+.primary-attr > p:first-child{
+    margin-top: 4rem;
+}
+/* Same type food carousel */
+.same-type-food-carousel{
+    /* background: rgba(0, 0, 0, 0.5); */
+    /* width: 400px; */
+}
+.same-type-food-arrow{
+    font-size: 40px;
+    text-align: center;
+    cursor: pointer;
+}
+.same-type-food-container{
+    overflow: hidden;
+}
+#moving-container{
+    position: relative;
+    top: 0px;
+    transition: all 0.4s;
+}
+.quantity-btn{
+    cursor: pointer;
+}
