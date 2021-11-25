@@ -389,7 +389,7 @@ if (document.querySelector(".container-sg-prod") != null) {
 
     const arrows = document.querySelectorAll(".same-type-food-arrow")
     const movingContainer = document.getElementById("moving-container")
-    const productsNumber = document.querySelectorAll(".card").length
+    const productsNumber = document.querySelectorAll(".container-sg-prod .card").length
     let clicks = 0
     const moveProducts = function (val) {
         return function () {
