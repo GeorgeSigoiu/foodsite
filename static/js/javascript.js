@@ -8,11 +8,11 @@ const badge = document.querySelector('.badge')
 const cartBtn = document.querySelector('#show-products-market')
 
 // update the number of products existing in cart
-const updateBadge = function () {
+const updateBadge = function (value = 1) {
     let contentBadge = badge.textContent;
     if (contentBadge === "") contentBadge = 0;
     else contentBadge = Number(contentBadge)
-    contentBadge += 1;
+    contentBadge += value;
     badge.textContent = contentBadge
 }
 
@@ -374,9 +374,73 @@ if (document.querySelector("#content-checkout") !== null) {
             }
             setTimeout(function () {
                 window.open("/", "_self")
-            }, 300)
+            }, 1000)
         }
     })
+}
+
+// single product page
+if (document.querySelector(".container-sg-prod") != null) {
+
+    const productCard = document.querySelector(".card")
+    const cardHeight = productCard.getBoundingClientRect().height + 5
+    const productsContainer = document.querySelector(".same-type-food-container")
+    productsContainer.style.height = `${cardHeight * 3}px`
+
+    const arrows = document.querySelectorAll(".same-type-food-arrow")
+    const movingContainer = document.getElementById("moving-container")
+    const productsNumber = document.querySelectorAll(".card").length
+    let clicks = 0
+    const moveProducts = function (val) {
+        return function () {
+            console.log(productsNumber - 3 > clicks, 0 <= clicks)
+            if (val === 1) {
+                if (productsNumber - 3 > clicks)
+                    clicks += 1
+            } else {
+                if (0 < clicks)
+                    clicks -= 1
+            }
+            movingContainer.style.top = `${-(clicks * cardHeight)}px`
+
+            console.log(val, clicks)
+        }
+
+    }
+    arrows[1].addEventListener("click", moveProducts(1))
+    arrows[0].addEventListener("click", moveProducts(-1))
+
+    const quantityBtns = document.querySelectorAll(".quantity-btn")
+    const quantityInput = document.querySelector(".sg-prod-input")
+    const addToCart = document.querySelector(".add-to-cart")
+    const infoLabel = document.querySelector(".alert-sg-prod")
+    quantityBtns[0].addEventListener("click", function () {
+        const value = quantityInput.value
+        quantityInput.value = Number(value) + 1
+    })
+    quantityBtns[1].addEventListener("click", function () {
+        const value = Number(quantityInput.value)
+        if (value > 1)
+            quantityInput.value = value - 1
+    })
+    const id = addToCart.getAttribute('id')
+    console.log(id)
+    addToCart.addEventListener("click", function () {
+        let market = []
+        for (let i = 0; i < Number(quantityInput.value); i++) {
+            market.push(id)
+        }
+        sendProducts(market)
+        updateBadge(market.length)
+        quantityInput.value = 1
+        infoLabel.style.visibility = "visible"
+        const message = market.length > 1 ? "Produsele au fost adaugate in cos!" : "Produsul a fost adaugat in cos!"
+        document.querySelector(".alert-sg-prod .alert__message").textContent = message
+    })
+    document.querySelector(".alert-sg-prod .alert__close").addEventListener("click", function () {
+        infoLabel.style.visibility = "hidden"
+    })
+
 }
 
 // $('#navbar a').on('click', function (event) {
