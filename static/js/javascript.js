@@ -382,11 +382,13 @@ if (document.querySelector("#content-checkout") !== null) {
 // single product page
 if (document.querySelector(".container-sg-prod") != null) {
 
+    //setting the container at height of 3 elements
     const productCard = document.querySelector(".card")
     const cardHeight = productCard.getBoundingClientRect().height + 5
     const productsContainer = document.querySelector(".same-type-food-container")
     productsContainer.style.height = `${cardHeight * 3}px`
 
+    //same type food carousel
     const arrows = document.querySelectorAll(".same-type-food-arrow")
     const movingContainer = document.getElementById("moving-container")
     const productsNumber = document.querySelectorAll(".container-sg-prod .card").length
@@ -409,7 +411,8 @@ if (document.querySelector(".container-sg-prod") != null) {
     }
     arrows[1].addEventListener("click", moveProducts(1))
     arrows[0].addEventListener("click", moveProducts(-1))
-
+    //
+    //adding more products one time and displaying message  
     const quantityBtns = document.querySelectorAll(".quantity-btn")
     const quantityInput = document.querySelector(".sg-prod-input")
     const addToCart = document.querySelector(".add-to-cart")
@@ -424,7 +427,6 @@ if (document.querySelector(".container-sg-prod") != null) {
             quantityInput.value = value - 1
     })
     const id = addToCart.getAttribute('id')
-    console.log(id)
     addToCart.addEventListener("click", function () {
         let market = []
         for (let i = 0; i < Number(quantityInput.value); i++) {
