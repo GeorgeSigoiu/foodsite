@@ -1,125 +1,197 @@
-{% extends 'main.html' %}
-{% block content %}
-
-
+{% extends 'main.html' %} {% block content %}
 
 <div class="container bg-dark my" id="checkout">
-    <div class="row" >
-        <div class="col-sm-2" id="progress-bar-checkout">
-            
-            <div class="circle-number">
-                1
-                <div class="step">Pasul</div>
-            </div>
-            <div class="number-conn">
-                <div class="number-conn-inner"></div>
-            </div>
-            <div class="circle-number">
-                2
-                <div class="step">Pasul</div>
-            </div>
-            <div class="number-conn">
-                <div class="number-conn-inner"></div>
-            </div>
-            <div class="circle-number">
-                3
-                <div class="step">Pasul</div>
-            </div>
-        </div>
-        <div class="col-sm-10" id="content-checkout">
-            <div class="container-info container-products-info">
-                <h2 class="container-title page-header">Produsele din cos</h2>
-                <div class="container-content page-header">
-                    {% for product,number in products.items %}
-                    <div class="card">
-                        <div class="card__body">
-                          <img src="{{product.featured_image.url}}" style="width: 50px;" alt="photo">
-                          <p >
-                              {{product.title}}
-                              <br>
-                              {{product.quantity}} 
-                              {% if "pizza" in product.title|lower %} 
-                                gr  
-                              {% elif "burger" in product.title|lower %}
-                                gr
-                              {% elif "salata" in product.title|lower %}
-                                gr
-                              {% else %}
-                                ml
-                              {% endif %}
-                          </p>
-                          <div class="quantity" style="font-size: 16px;">
-                            <button type="button" class="btn-incr btn btn-info">+</button>
-                            <input type="number" min="1" max="9" step="1" value="{{number}}" id="{{product.id}}">
-                            <button type="button" class="btn-decr btn btn-info">-</button>
-                          </div>
-                        <p class="product-cost">
-                            <span class="product-cost-span">
-                                pret pe unitate: <span class="product-price">{{product.price}}</span> lei
-                            </span>
-                        </p>
-                        <p class="product-cost">
-                            <span class="product-cost-span">
-                                pret total: <span class="product-price-total"></span> lei
-                            </span>
-                        </p>
-                        </div>
-
-                      </div>
-                    {% endfor %}
-                </div>
-                <div class="total-cost">
-                    <span class="span-text">Total: </span>
-                    <span class="span-text total-money"></span>
-                </div>
-                <ul class="pager">
-                    <li><span class="checkout-next disabled">Inainte <i class="fas fa-chevron-right"></i></span></li>
-                </ul>
-            </div>
-            <div class=" container-info container-order-info ">
-                <h2 class="container-title page-header">Date personale & metoda plata</h2>
-                <div class="container-content">
-                    {% include 'order_form.html' %} 
-                </div>
-                <ul class="pager">
-                    <li><span class="checkout-prev"><i class="fas fa-chevron-left"> </i> Inapoi</span></li>
-                    <li><span class="checkout-next disabled">Inainte <i class="fas fa-chevron-right"></i></span></li>
-                </ul>
-            </div>
-            <div class="container-info container-review-info">
-                <h2 class="container-title page-header">Plaseaza comanda</h2>
-                <div class="container-content" style="position: relative !important;">
-                    <div style="background-color: white;margin-top: 2rem;margin-bottom:2rem;border-radius:30px;border-style: ridge;">
-                        <h3 style="padding-left: 4rem;">Vizualizare informatii</h3>
-                        <div style="padding-left: 3rem; ">
-                            <p class="c-black fs-16">Nume: <span id="name-review-order" class="c-black fs-16">George Sigoiu</span></p>
-                            <p class="c-black fs-16">Telefon: <span id="phone-review-order" class="c-black fs-16">0721005617</span></p>
-                            <p class="c-black fs-16">Email: <span id="email-review-order" class="c-black fs-16">georgesigoiu1@gmail.com</span></p>
-                            <p class="c-black fs-16">Adresa livrare: <span id="address-review-order" class="c-black fs-16">adresa unde se livreaza</span></p>
-                            <p class="c-black fs-16"> <strong class="c-black fs-16"> Suma de platit: <span id="price-review-order" class="c-black fs-16">100 lei</span></strong></p>
-                        </div>
-                    </div>
-                    <div>
-                        <label>
-                            <input type="checkbox" name="conditions" id="site-conditions">
-                            Accept termenii si conditiile!
-                        </label>
-                        <br>
-                        <label>
-                            <input type="checkbox" name="newsletter" id="subscribe-newsletter">
-                            Vreau sa ma abonez la newsletter!
-                        </label>
-                    </div>
-                    
-                </div>
-                <ul class="pager">
-                    <li><span class="checkout-prev"><i class="fas fa-chevron-left"></i> Inapoi</span></li>
-                    <li><span class="checkout-next disabled" data-toggle="modal" data-target="#myModal">Comanda</span></li>
-                </ul>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-sm-2" id="progress-bar-checkout">
+      <div class="circle-number">
+        1
+        <div class="step">Pasul</div>
       </div>
+      <div class="number-conn">
+        <div class="number-conn-inner"></div>
+      </div>
+      <div class="circle-number">
+        2
+        <div class="step">Pasul</div>
+      </div>
+      <div class="number-conn">
+        <div class="number-conn-inner"></div>
+      </div>
+      <div class="circle-number">
+        3
+        <div class="step">Pasul</div>
+      </div>
+    </div>
+    <div class="col-sm-10" id="content-checkout">
+      <div class="container-info container-products-info">
+        <h2 class="container-title page-header">Produsele din cos</h2>
+        <div class="container-content page-header">
+          {% for product,number in products.items %}
+          <div class="card">
+            <div class="card__body">
+              <img
+                src="{{product.featured_image.url}}"
+                style="width: 50px"
+                alt="photo"
+              />
+              <p>
+                {{product.title}}
+                <br />
+                {{product.quantity}} {% if "pizza" in product.title|lower %} gr
+                {% elif "burger" in product.title|lower %} gr {% elif "salata"
+                in product.title|lower %} gr {% else %} ml {% endif %}
+              </p>
+              <div class="quantity" style="font-size: 16px">
+                <button type="button" class="btn-incr btn btn-info">+</button>
+                <input
+                  type="number"
+                  min="1"
+                  max="9"
+                  step="1"
+                  value="{{number}}"
+                  id="{{product.id}}"
+                />
+                <button type="button" class="btn-decr btn btn-info">-</button>
+              </div>
+              <p
+                class="product-cost"
+                style="
+                  margin-top: auto;
+                  margin-bottom: auto;
+                  text-align: center;
+                "
+              >
+                <span class="product-cost-span">
+                  pret pe unitate:
+                  <span class="product-price">{{product.price}}</span> lei
+                </span>
+              </p>
+              <p
+                class="product-cost"
+                style="margin-top: auto; margin-bottom: auto"
+              >
+                <span class="product-cost-span">
+                  pret total: <span class="product-price-total"></span> lei
+                </span>
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="total-cost">
+          <span class="span-text">Total: </span>
+          <span class="span-text total-money"></span>
+        </div>
+        <ul class="pager">
+          <li>
+            <span class="checkout-next disabled"
+              >Inainte <i class="fas fa-chevron-right"></i
+            ></span>
+          </li>
+        </ul>
+      </div>
+      <div class="container-info container-order-info">
+        <h2 class="container-title page-header">
+          Date personale & metoda plata
+        </h2>
+        <div class="container-content">
+          {% include 'products/order_form.html' %}
+        </div>
+        <ul class="pager">
+          <li>
+            <span class="checkout-prev"
+              ><i class="fas fa-chevron-left"> </i> Inapoi</span
+            >
+          </li>
+          <li>
+            <span class="checkout-next disabled"
+              >Inainte <i class="fas fa-chevron-right"></i
+            ></span>
+          </li>
+        </ul>
+      </div>
+      <div class="container-info container-review-info">
+        <h2 class="container-title page-header">Plaseaza comanda</h2>
+        <div class="container-content" style="position: relative !important">
+          <div
+            style="
+              background-color: white;
+              margin-top: 2rem;
+              margin-bottom: 2rem;
+              border-radius: 30px;
+              border-style: ridge;
+            "
+          >
+            <h3 style="padding-left: 4rem">Vizualizare informatii</h3>
+            <div style="padding-left: 3rem">
+              <p class="c-black fs-16">
+                Nume:
+                <span id="name-review-order" class="c-black fs-16"
+                  >George Sigoiu</span
+                >
+              </p>
+              <p class="c-black fs-16">
+                Telefon:
+                <span id="phone-review-order" class="c-black fs-16"
+                  >0721005617</span
+                >
+              </p>
+              <p class="c-black fs-16">
+                Email:
+                <span id="email-review-order" class="c-black fs-16"
+                  >georgesigoiu1@gmail.com</span
+                >
+              </p>
+              <p class="c-black fs-16">
+                Adresa livrare:
+                <span id="address-review-order" class="c-black fs-16"
+                  >adresa unde se livreaza</span
+                >
+              </p>
+              <p class="c-black fs-16">
+                <strong class="c-black fs-16">
+                  Suma de platit:
+                  <span id="price-review-order" class="c-black fs-16"
+                    >100 lei</span
+                  ></strong
+                >
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="conditions" id="site-conditions" />
+              Accept termenii si conditiile!
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                name="newsletter"
+                id="subscribe-newsletter"
+              />
+              Vreau sa ma abonez la newsletter!
+            </label>
+          </div>
+        </div>
+        <ul class="pager">
+          <li>
+            <span class="checkout-prev"
+              ><i class="fas fa-chevron-left"></i> Inapoi</span
+            >
+          </li>
+          <li>
+            <span
+              class="checkout-next disabled"
+              data-toggle="modal"
+              data-target="#myModal"
+              >Comanda</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
-
 
 {% endblock content %}

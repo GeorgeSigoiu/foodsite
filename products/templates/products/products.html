@@ -43,7 +43,7 @@
             {% for product in products %}
                 <div class="col-lg-3">
                     <div class="card" style="height: 350px;">
-                        <img class="avatar avatar--lg" src="{{product.featured_image.url}}" />
+                        <a href="{% url 'single-product' product.id %}"><img class="avatar avatar--lg" src="{{product.featured_image.url}}" /></a>
                         <div class="card__body">
                             <div class="media">
                                 <div class="media-body">
@@ -61,34 +61,7 @@
         </div>
     </div>
 </div>
-
-<div class="container bg-dark" id="drinks-carousel">
-    <!-- arrow left -->
-    <div class="drinks-carousel-arrow" id="drinks-carousel-arrow-left">
-        <i class="fas fa-chevron-left fa-3x"></i>
-    </div>
-    
-    <div class="drinks-carousel-content">
-        {% for drink in drinks %}
-        <div class="card drinks-carousel-card" style="width: 200px">
-            <div class="card__body">
-                <img class="avatar avatar--md" src="{{drink.featured_image.url}}" style="border:none;margin-top: 0;"/>
-                <h3 style="font-size: 16px;">{{drink.title}}</h3>
-                <p style="font-size: 14px;">
-                    {{drink.quantity}}ml
-                    <br>
-                    pret: {{drink.price}}lei
-                </p>
-                <button class="btn-add-cart-drink btn btn--main--outline" id="{{drink.id}}">Adauga in cos</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    <!-- arrow right -->
-    <div class="drinks-carousel-arrow" id="drinks-carousel-arrow-right">
-        <i class="fas fa-chevron-right fa-3x"></i>
-    </div>
-</div>
+{% include 'products/drinks_carousel.html' %}
 <script>
     const checkboxes = document.querySelectorAll("#sorting-products-tags .checkbox label")
 
