@@ -7,11 +7,12 @@ from django.conf import settings
 from django.views.static import serve
 from django.conf.urls import url
 
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
-
+    path('login/', views.login, name="login"),
 
     url(r'^media/(?P<path>.*)$', serve,
         {'document_root': settings.MEDIA_ROOT}),
