@@ -37,12 +37,25 @@
       </div>
     </form>
     <ul class="nav navbar-nav navbar-right">
+      {% if profile %}
+      <li>
+        <a href="{% url 'user-profile' profile.username %}">
+        </span> {{profile.username}}
+      </a>
+      </li>
+      <li>
+        <a href="{% url 'logout-user' %}">
+          <span class="glyphicon glyphicon-log-in"></span> Deconectare
+        </a>
+      </li>
+      {% else %}
       <li>
         <a href="{% url 'login' %}"
           ><span class="glyphicon glyphicon-log-in"></span> Logare /
           Inregistrare</a
         >
       </li>
+      {% endif %}
       <li>
         <a href="{% url 'show-products-cart' %}" id="show-products-market">
           <i class="fas fa-shopping-cart"></i>
