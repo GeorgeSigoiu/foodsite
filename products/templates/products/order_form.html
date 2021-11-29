@@ -10,25 +10,25 @@
                     <div class="form-inline">
                         <div class="form-group form-animate">
                             <label for="firstname" >Prenume:</label><br>
-                            <input type="text" class="form-control" id="order-firstname" name="firstname" placeholder="Prenume" >
+                            <input type="text" class="form-control" id="order-firstname" name="firstname" placeholder="Prenume" value="{{profile.firstname}}">
                         </div>
                         <div class="form-group form-animate">
                             <label for="surname" >Nume:</label><br>
-                            <input type="text" class="form-control" id="order-surname" name="surname" placeholder="Nume" >
+                            <input type="text" class="form-control" id="order-surname" name="surname" placeholder="Nume" value="{{profile.surname}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group form-animate">
                     <label for="phone">Telefon:</label>
-                    <input type="text" class="form-control" style="max-width: 200px;" name="phone" maxlength="12" size="12" placeholder="Telefon" id="order-phone">
+                    <input type="text" class="form-control" style="max-width: 200px;" name="phone" maxlength="12" size="12" placeholder="Telefon" id="order-phone" value="{{profile.phone}}">
                 </div>
                 <div class="form-group form-animate">
                     <label for="email"  >Email:</label>
-                    <input type="email" class="form-control" name="email" placeholder="Adresa mail" id="order-email">
+                    <input type="email" class="form-control" name="email" placeholder="Adresa mail" id="order-email" value="{{profile.email}}">
                 </div>
                 <div class="form-group">
                     <label for="deliveryAddress">Adresa livrare:</label>
-                    <textarea class="form-control" rows="4" name="deliveryAddress"  placeholder="Adresa de livrare..." id="order-address"></textarea>
+                    <textarea class="form-control" rows="4" name="deliveryAddress"  placeholder="Adresa de livrare..." id="order-address" >{{profile.address}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="comments">Comentarii:</label>
@@ -54,6 +54,5 @@
         <p class="checkout-p" id="delivery-cost">- Livrator magazin: 10.00 lei</p>
         <p class="checkout-p">Livrarea este gratis daca comanda depaseste pretul de 60 lei.</p>
     </div>
-
   </div>
 
