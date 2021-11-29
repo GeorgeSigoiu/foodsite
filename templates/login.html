@@ -13,23 +13,28 @@
   <body>
     <div class="container" id="container">
       <div class="form-container sign-up-container">
-        <form action="#" method="POST">
+        <form action="{% url 'create-user' %}" method="POST">
           {% csrf_token %}
-          <h1>Create Account</h1>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <button type="submit">Sign Up</button>
+          <h1>Creaza un cont</h1>
+          <input type="text" placeholder="Nume utilizator" name="username" />
+          <input type="email" placeholder="Email" name="email" />
+          <input type="password" placeholder="Parola" name="password" />
+          <button type="submit">Creare</button>
         </form>
       </div>
       <div class="form-container sign-in-container">
-        <form action="#" method="POST">
+        <form action="{% url 'login-user' %}" method="POST">
           {% csrf_token %}
-          <h1>Log in</h1>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <a href="#">Forgot your password?</a>
-          <button type="submit">Log in</button>
+          <h1>Conecteaza-te</h1>
+          <input type="text" placeholder="Nume utilizator" name="username" />
+          <input type="password" placeholder="Parola" name="password" />
+          <a href="#">Ai uitat parola?</a>
+          <button type="submit">Logare</button>
+          {% if message %}
+          <p style="background: rgba(255, 2, 2, 0.753); border-radius: 10px">
+            Numele de utilizator sau parola sunt gresite!
+          </p>
+          {% endif %}
         </form>
       </div>
       <div class="overlay-container">
@@ -39,12 +44,12 @@
             <p>
               To keep connected with us please login with your personal info
             </p>
-            <button class="ghost" id="signIn">Log in</button>
+            <button class="ghost" id="signIn">Conectare</button>
           </div>
           <div class="overlay-panel overlay-right">
             <h1>Hello there!</h1>
             <p>Enter your personal details and start journey with us</p>
-            <button class="ghost" id="signUp">Sign Up</button>
+            <button class="ghost" id="signUp">Creare cont</button>
           </div>
         </div>
       </div>
