@@ -3,7 +3,6 @@ import io as StringIO
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.http import HttpResponse
-from html import escape
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .models import Product, Content, Drink, Sauce
