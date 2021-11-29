@@ -1,3 +1,5 @@
+import users.views
+from users.models import Bill
 from django.http.response import JsonResponse
 import io as StringIO
 from xhtml2pdf import pisa
@@ -21,11 +23,15 @@ productsDict = []
 productsList = []
 pdfResponseDownload = None
 rendered_string_from_html = None
+profile = None
 
 
 def showHomePage(request):  # home page
+    global profile
+    profile = userIsLoggedIn()
     context = {
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     return render(request, "home.html", context=context)
 
@@ -33,14 +39,18 @@ def showHomePage(request):  # home page
 def showProductsCart(request):  # products intended to be bought
     global productsDict
     global productsList
+    global profile
+
     context = {
         "products": productsDict,
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     return render(request, "products/buy_products.html", context=context)
 
 
 def showProducts(request, type):  # show all products of type "type"
+    global profile
     products = Product.objects.filter(typeof=type)
     contents = Content.objects.filter(typeof=type)
     drinks = Drink.objects.all()
@@ -50,11 +60,13 @@ def showProducts(request, type):  # show all products of type "type"
         "tags": contents,
         "type": type,
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     return render(request, "products/products.html", context=context)
 
 
 def showSingleProduct(request, pk):  # show informations about one product
+    global profile
     product = Product.objects.get(id=pk)
     type1 = product.typeof
     products = Product.objects.filter(
@@ -65,6 +77,7 @@ def showSingleProduct(request, pk):  # show informations about one product
         "products": products,
         "drinks": drinks,
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     return render(request, "products/single_product.html", context=context)
 
@@ -82,6 +95,7 @@ def deleteProductsFromJS(request):  # deleting products from list
 # showing the products containing search string in name or in its containings
 def productsSearch(request):
     global productsList
+    global profile
     search = request.POST.get("search", "")
     allProducts = Product.objects.all()
     drinks = Drink.objects.all()
@@ -98,6 +112,7 @@ def productsSearch(request):
         "tags": contents,
         "type": "search",
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     if len(productsDistinct) == 0:
         productsNotFoundMessage = "Nu s-au gasit rezultate pentru '"+search+"'!"
@@ -106,6 +121,7 @@ def productsSearch(request):
 
 
 def productsSort(request, type):  # showing the products which containg some tags
+    global profile
     drinks = Drink.objects.all()
     contents = Content.objects.filter(typeof=type)
     allProducts = Product.objects.filter(typeof=type)
@@ -129,6 +145,7 @@ def productsSort(request, type):  # showing the products which containg some tag
         "enabledTags": enabledTags,
         "type": type,
         "numberOfProducts": len(productsList),
+        "profile": profile,
     }
     return render(request, "products/products.html", context=context)
 
@@ -220,11 +237,16 @@ def doWork(request):  # creating the bill and initializing the pdf-bill
     global pdfResponseDownload
     requestDict = dict(request.POST)
     pdfResponseDownload = createBill(requestDict)
+    addBillToDatabase(requestDict)
+    resetProductList()
+    return pdfResponseDownload
+
+
+def resetProductList():
     global productsDict
     global productsList
     productsList = []
     productsDict = []
-    return pdfResponseDownload
 
 
 def createBill(requestDict):  # creates the bill
@@ -263,6 +285,31 @@ def createBill(requestDict):  # creates the bill
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="delivery_order.pdf"'
     return response
+
+
+def addBillToDatabase(requestDict):
+    name = trimString(requestDict["firstname"]) + \
+        " "+trimString(requestDict["surname"])
+    address = trimString(requestDict["deliveryAddress"])
+    phone = trimString(requestDict["phone"])
+    email = trimString(requestDict["email"])
+    totalPrice = trimString(requestDict["priceTotal"])
+    deliveryCost = "10"
+    if int(totalPrice) > 60:
+        deliveryCost = "0"
+    else:
+        totalPrice = int(totalPrice) + 10
+    global productsDict
+    products = ""
+    for product, number in productsDict.items():
+        products += str(product).replace(" ", "-")+" "+str(number)+" " + \
+            str(product.price*number)+", "
+    bill = Bill.create(name, address, phone, email, products, totalPrice)
+    bill.save()
+    global profile
+    if profile:
+        profile.bills.add(bill)
+        profile.save()
 
 
 def trimString(string):
@@ -326,3 +373,8 @@ def getProductsByContent(search, allProducts):
         if len(content) > 0:
             result.append(prod)
     return result
+
+
+def userIsLoggedIn():
+    profile = users.views.getProfileLoggedIn()
+    return profile
