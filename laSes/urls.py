@@ -12,7 +12,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
-    path('users/', include('users.urls')),
+    path('', include('users.urls')),
     path('login/', views.login, name="login"),
 
     url(r'^media/(?P<path>.*)$', serve,
