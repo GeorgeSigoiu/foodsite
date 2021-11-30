@@ -17,7 +17,8 @@ class Profile(models.Model):
 
     @classmethod
     def create(cls, email, username, password):
-        profile = cls(email=email, username=username, password=password)
+        profile = cls(email=email, username=username, password=password,
+                      firstname="", surname="", phone="", address="")
         return profile
 
     def __str__(self):
@@ -33,6 +34,7 @@ class Bill(models.Model):
     email = models.CharField(max_length=200)
     products = models.TextField(null=True, blank=True)
     price = models.IntegerField(default=0, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     @classmethod
     def create(cls, name, address, phone, email, products, price):
@@ -41,4 +43,4 @@ class Bill(models.Model):
         return bill
 
     def __str__(self):
-        return str(self.bill_number)+"("+self.name+")"
+        return str(self.created_at)[:19]+" - "+str(self.bill_number)[:6]
