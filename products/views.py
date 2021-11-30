@@ -30,7 +30,7 @@ def showHomePage(request):  # home page
     global profile
     profile = userIsLoggedIn()
     context = {
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     return render(request, "home.html", context=context)
@@ -38,12 +38,10 @@ def showHomePage(request):  # home page
 
 def showProductsCart(request):  # products intended to be bought
     global productsDict
-    global productsList
     global profile
-
     context = {
         "products": productsDict,
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     return render(request, "products/buy_products.html", context=context)
@@ -59,7 +57,7 @@ def showProducts(request, type):  # show all products of type "type"
         "drinks": drinks,
         "tags": contents,
         "type": type,
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     return render(request, "products/products.html", context=context)
@@ -76,7 +74,7 @@ def showSingleProduct(request, pk):  # show informations about one product
         'product': product,
         "products": products,
         "drinks": drinks,
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     return render(request, "products/single_product.html", context=context)
@@ -94,7 +92,6 @@ def deleteProductsFromJS(request):  # deleting products from list
 
 # showing the products containing search string in name or in its containings
 def productsSearch(request):
-    global productsList
     global profile
     search = request.POST.get("search", "")
     allProducts = Product.objects.all()
@@ -111,7 +108,7 @@ def productsSearch(request):
         "drinks": drinks,
         "tags": contents,
         "type": "search",
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     if len(productsDistinct) == 0:
@@ -144,7 +141,7 @@ def productsSort(request, type):  # showing the products which containg some tag
         "tags": contents,
         "enabledTags": enabledTags,
         "type": type,
-        "numberOfProducts": len(productsList),
+        "numberOfProducts": getNumberOfProducts(),
         "profile": profile,
     }
     return render(request, "products/products.html", context=context)
@@ -153,14 +150,14 @@ def productsSort(request, type):  # showing the products which containg some tag
 def prepareBill(request):  # preparing the bill and sending email
     result = doWork(request)
     requestDict = dict(request.POST)
-    # sendEmail(trimString(requestDict["email"]))
+    sendEmail(trimString(requestDict["email"]))
     return result
 
 
 def downloadBill(request):  # downloading the bill and sending email
     doWork(request)
     requestDict = dict(request.POST)
-    # sendEmail(trimString(requestDict["email"]))
+    sendEmail(trimString(requestDict["email"]))
     return redirect("/")
 
 # -------------------------------------------------------------
@@ -375,6 +372,12 @@ def getProductsByContent(search, allProducts):
     return result
 
 
-def userIsLoggedIn():
+def userIsLoggedIn():  # gets the user who is logged in
     profile = users.views.getProfileLoggedIn()
     return profile
+
+
+def getNumberOfProducts():  # gets the number of products from cart
+    global productsList
+    numberOfProducts = len(productsList)
+    return numberOfProducts

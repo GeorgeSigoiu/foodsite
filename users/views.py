@@ -53,7 +53,8 @@ def loginUser(request):
 def showProfile(request, username):
     global profile_logged_in
     context = {
-        "profile": profile_logged_in
+        "profile": profile_logged_in,
+        "numberOfProducts": getNumberOfProducts(),
     }
     return render(request, 'users/profiles.html', context)
 
@@ -74,7 +75,8 @@ def updatePersonalInfo(request):
     profile_logged_in.address = address
     profile_logged_in.save()
     context = {
-        "profile": profile_logged_in
+        "profile": profile_logged_in,
+        "numberOfProducts": getNumberOfProducts(),
     }
     return render(request, 'users/profiles.html', context)
 
@@ -100,6 +102,11 @@ def logout():
 def getProfileLoggedIn():
     global profile_logged_in
     return profile_logged_in
+
+
+def getNumberOfProducts():
+    numberOfProducts = products.views.getNumberOfProducts()
+    return numberOfProducts
 
 
 def trim(string):
