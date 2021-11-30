@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebsiteName - login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script
       src="https://kit.fontawesome.com/5a450054d9.js"
       crossorigin="anonymous"
@@ -30,11 +33,6 @@
           <input type="password" placeholder="Parola" name="password" />
           <a href="#">Ai uitat parola?</a>
           <button type="submit">Logare</button>
-          {% if message %}
-          <p style="background: rgba(255, 2, 2, 0.753); border-radius: 10px">
-            Numele de utilizator sau parola sunt gresite!
-          </p>
-          {% endif %}
         </form>
       </div>
       <div class="overlay-container">
@@ -54,6 +52,31 @@
         </div>
       </div>
     </div>
+
+
+      <!-- Trigger the modal with a button -->
+      <button type="button" id="login-modal" class="btn btn-info btn-lg" style="visibility: hidden !important;" data-toggle="modal" data-target="#myModal">Open Modal</button>
+    
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog" >
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">ATENTIE!</h4>
+            </div>
+            <div class="modal-body">
+              <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">inchide</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
   </body>
   <script>
     const signUpButton = document.getElementById("signUp");
@@ -67,6 +90,12 @@
     signInButton.addEventListener("click", () => {
       container.classList.remove("right-panel-active");
     });
+
+    const openModalButton=document.getElementById("login-modal")
+    const message="{{message}}"
+    if(message.length!==0){
+      openModalButton.click()
+    }
   </script>
   <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
@@ -116,8 +145,8 @@
 
     button {
       border-radius: 20px;
-      border: 1px solid #ff4b2b;
-      background-color: #ff4b2b;
+      border: 1px solid #2b87ff;
+      background-color: #2b87ff;
       color: #ffffff;
       font-size: 12px;
       font-weight: bold;
@@ -233,8 +262,8 @@
 
     .overlay {
       background: #ff416c;
-      background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-      background: linear-gradient(to right, #ff4b2b, #ff416c);
+      background: -webkit-linear-gradient(to right, #2bb1ff, #3072ff);
+      background: linear-gradient(to right, #2bb1ff, #3072ff);
       background-repeat: no-repeat;
       background-size: cover;
       background-position: 0 0;
