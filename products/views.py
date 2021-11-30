@@ -184,7 +184,7 @@ def sendEmail(receiverEmail):  # sending the email
     message = MIMEMultipart()
     message['From'] = sender
     message['To'] = receiver
-    message['Subject'] = 'WebsiteName - comanda inregistrata'
+    message['Subject'] = 'Restaurant Cataleya - comanda inregistrata'
 
     message.attach(MIMEText(body, 'plain'))
 
