@@ -47,7 +47,9 @@
                 {% for bill in profile.bills.all %}
                 <div class="bill-div">
                     <h4>{{bill}}</h4>
-                    <button id="{{bill.bill_number}}" class="btn my-btn" >descarca</button>
+                    <form action="{% url 'create-bill' bill.bill_number %}">
+                        <button type="submit" class="btn my-btn">descarca</button>
+                    </form>
                 </div>
                 {% endfor %}
             </div>
@@ -132,7 +134,7 @@
     .bill-div:hover{
         box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.7);
     }
-    .bill-div .btn{
+    .bill-div form{
         margin: auto 0;
         margin-right: 5px;
     }
