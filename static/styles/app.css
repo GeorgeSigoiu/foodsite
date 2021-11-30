@@ -55,6 +55,47 @@ html {
   background: #333 !important;
   color: white !important;
 }
+/* Home page---------------------------------------------------------*/
+#showcase{
+  position: relative;
+  height: 95vh;
+  width: 100vw;
+  background: url("../images/showcase/pizza-on-table.jpg") no-repeat center center / cover;
+  overflow: hidden;
+}
+#showcase .positioning-div{
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-left: 5vw;
+  /* margin-top: 7vh; */
+  width: 50vw;
+  height: 80vh;
+}
+#showcase .positioning-div .main-title{
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+#showcase h1{
+  color: white;
+  font-size: 80px;
+  padding: 4rem;
+  text-align: center;
+  font-family: 'Indie Flower', cursive;
+}
+#showcase p{
+  color: white;
+  font-size: 40px;
+  font-family: 'Indie Flower', cursive;
+  display: block;
+  max-width: 20vw;
+  text-align: center;
+  margin: 0 auto;
+}
 /* Footer ---------------------------------------------------------- */
 .open-location {
   cursor: pointer;
