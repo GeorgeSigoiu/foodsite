@@ -1,4 +1,6 @@
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 import products.views
 
 from users.models import Bill, Profile
@@ -112,3 +114,57 @@ def getNumberOfProducts():
 def trim(string):
     result = str(string).replace("['", "").replace("']", "")
     return result
+
+
+def createBill(request, bill_number):
+    bill = Bill.objects.get(bill_number=bill_number)
+    name = bill.name
+    address = bill.address
+    phone = bill.phone
+    email = bill.email
+    timestamp = str(bill.created_at)[:10]
+    totalPrice = bill.price
+    deliveryCost = 10
+    if totalPrice > 60:
+        deliveryCost = 0
+    productsString = bill.products
+    productsToShow = render_products_from_string(productsString)
+    context = {
+        'pagesize': 'A4',
+        'name': name,
+        'address': address,
+        'phone': phone,
+        'email': email,
+        'products': productsToShow,
+        'productsPrice': totalPrice,
+        "deliveryCost": deliveryCost,
+        'timestamp': timestamp,
+    }
+    pdf = products.views.render_to_pdf('bill.html', context)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{bill}.pdf"'
+    return response
+
+
+def render_products_from_string(productsString):
+    products = productsString.split(", ")
+    productsList = []
+    for product in products:
+        productParts = product.split(" ")
+        if len(productParts) < 3:
+            break
+        title = productParts[0].replace("-", " ")
+        quantity = int(productParts[1])
+        priceTotal = int(productParts[2])
+        priceUnit = priceTotal/quantity
+        newProduct = MyProduct(title, priceUnit)
+        element = (newProduct, quantity, priceTotal)
+        productsList.append(element)
+
+    return productsList
+
+
+class MyProduct:
+    def __init__(self, title, price):
+        self.title = title
+        self.price = price
