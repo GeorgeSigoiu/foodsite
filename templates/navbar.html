@@ -39,7 +39,7 @@
     <ul class="nav navbar-nav navbar-right">
       {% if profile %}
       <li>
-        <a href="{% url 'user-profile' profile.username %}">
+        <a href="{% url 'user-profile' profile.username %}" data-toggle="tooltip" title="Vezi profilul">
         </span> {{profile.username}}
       </a>
       </li>
