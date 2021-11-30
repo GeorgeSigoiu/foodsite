@@ -1,3 +1,186 @@
 {% extends 'main.html' %} {% block content %}
-<h1>USER:{{profile.username}}</h1>
+<div class="container user-page">
+    <div class="headers-content">
+        <div class="group-header">
+            <h2>Date personale</h2>
+        </div>
+        <div class="group-header">
+            <h2>Istoric comenzi</h2>
+        </div>
+    </div>
+    <div class="info-content">
+        <div id="container-personal" class="container-content">
+            <form method="POST" action="{% url 'update-user' %}" id="update-form" name="updateForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-group">
+                        <div class="form-inline">
+                            <div class="form-group form-animate">
+                                <label for="firstname" >Prenume:</label><br>
+                                <input type="text" class="form-control form-select" name="firstname" placeholder="Prenume" value="{{profile.firstname}}" readonly>
+                            </div>
+                            <div class="form-group form-animate">
+                                <label for="surname" >Nume:</label><br>
+                                <input type="text" class="form-control form-select" name="surname" placeholder="Nume" value="{{profile.surname}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-animate">
+                        <label for="phone">Telefon:</label>
+                        <input type="text" class="form-control form-select" style="max-width: 200px;" name="phone" maxlength="12" size="12" placeholder="Telefon" value="{{profile.phone}}" readonly>
+                    </div>
+                    <div class="form-group form-animate">
+                        <label for="email"  >Email:</label>
+                        <input type="email" class="form-control form-select" name="email" placeholder="Adresa mail" value="{{profile.email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryAddress">Adresa livrare:</label>
+                        <textarea class="form-control form-select" rows="3" name="address"  placeholder="Adresa de livrare..." readonly>{{profile.address}}</textarea>
+                    </div>
+                </div>
+                <span class="btn btn--main button" id="mod">Modifica datele</span>
+                <button type="submit" id="save" class="btn btn--main button">Salveaza schimbarile</button>
+            </form>
+        </div>
+        <div id="container-bills" class="container-content">
+            <div class="bill-container">
+                {% for bill in profile.bills.all %}
+                <div class="bill-div">
+                    <h4>{{bill}}</h4>
+                    <button id="{{bill.bill_number}}" class="btn my-btn" >descarca</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    #update-form input,
+    #update-form textarea{
+        font-size: 17px;
+        padding: 0 !important;
+        text-align: center;
+    }
+    #update-form textarea{
+        text-align: left;
+        padding:1rem !important;
+    }
+    .button{
+        background: rgb(0, 162, 255) !important;
+        color: #333 !important;
+        font-size: 18px;
+    }
+    .button:hover{
+        background: #333 !important;
+        color: rgb(0, 162, 255)  !important;
+    }
+    .user-page{
+        border-radius: 20px;
+        padding: 3rem 5rem;
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
+    .headers-content{
+        display: flex;
+        justify-content: space-around;
+    }
+    .group-header{
+        border: 1px solid black;
+        display: inline-block;
+        background-image: linear-gradient(to right bottom,rgb(0, 162, 255),rgb(2, 136, 214));
+        padding-left: 2rem;
+        padding-right: 2rem;
+        border-radius: 10px 10px 0px 0px;
+    }
+    .container-content{
+        background-image: linear-gradient(to right bottom,rgb(0, 162, 255),rgb(0, 81, 255));
+        margin-left:  2rem;
+        margin-right: 2rem;
+        padding: 3rem 3rem;
+        border-radius: 20px;
+        flex: 1;
+    }
+    .info-content{
+        display: flex;
+    }
+    #container-bills{
+        padding: 3rem;
+        
+    }
+    .bill-container{
+        background: white;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }  
+    .bill-div{
+        margin-left: 1rem;
+        padding-left: 1rem;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 1rem;
+        background: whitesmoke;
+        transition: box-shadow 0.3s ;
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+    } 
+    .bill-div:hover{
+        box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.7);
+    }
+    .bill-div .btn{
+        margin: auto 0;
+        margin-right: 5px;
+    }
+    .my-btn{
+        background-color: #5abedf;
+        color: white;
+    }
+    .my-btn:hover{
+        background-color: #6cdaff;
+        color: black;
+    }
+    #save{
+        visibility: hidden;
+    }
+</style>
+<script>
+
+    const personalContainer=document.getElementById("container-personal")
+    const billsContainer=document.getElementById("container-bills")
+    let heightContainer=1
+    billsContainer.style.maxHeight=`${heightContainer}px`
+    heightContainer=personalContainer.getBoundingClientRect().height
+    billsContainer.style.maxHeight=`${heightContainer}px`
+    
+    const modBtn=document.getElementById("mod")
+    const saveBtn=document.getElementById("save")
+    let inputs=[]
+    document.querySelectorAll(".form-select").forEach(inp=>inputs.push(inp))
+    let inputsValues=[]
+    modBtn.addEventListener("click",function(e){
+        e.preventDefault()
+        if(this.textContent==="Anuleaza"){
+            inputs.forEach((input,i)=>{
+                input.value=inputsValues[i]
+                input.setAttribute("readonly","true")
+            })
+            this.textContent="Modifica datele"
+            saveBtn.style.visibility="hidden"
+        }
+        else{
+            inputs.forEach(input=>input.removeAttribute("readonly"))
+            saveBtn.style.visibility="visible"
+            this.textContent="Anuleaza"
+            inputsValues=[]
+            inputs.forEach(input=>{
+                inputsValues.push(input.value)
+            })
+        }
+    })
+</script>
 {% endblock content %}
