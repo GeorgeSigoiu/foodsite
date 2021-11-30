@@ -30,7 +30,7 @@
 
     <!-- HTML Content -->
     <div style="font-size: 14px;">
-        website: www.localhost:8000.ro <br>
+        website: localhost:8000 <br>
         Strada Teodor Mihali 29, Marasti, Cluj-Napoca <br> 
         Strada Sesului 33A, Manastur, Cluj-Napoca <br>
         Telefon: 0364 990 / 0744 215 250 <br>
@@ -73,9 +73,9 @@
     	<tr>
  
     		<td>{{product.title}}</td>
-    		<td>{{product.price}} lei</td>
-    		<td>{{quantity}}</td>
-    		<td>{{total}} lei</td>
+    		<td style="text-align: center;">{{product.price}} lei</td>
+    		<td style="text-align: center;">{{quantity}}</td>
+    		<td style="text-align: center;">{{total}} lei</td>
     	</tr>
         {% endfor %}
     </table>
