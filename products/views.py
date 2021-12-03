@@ -32,7 +32,6 @@ def showHomePage(request):  # home page
 
 def showProductsCart(request):  # products intended to be bought
     global productsDict
-    global profile
     context = get_context(products=productsDict)
     return render(request, "products/buy_products.html", context=context)
 
@@ -41,7 +40,7 @@ def showProducts(request, typeof):  # show all products of type "type"
     products = Product.objects.filter(typeof=typeof)
     contents = Content.objects.filter(typeof=typeof)
     drinks = Drink.objects.all()
-    context = get_context(contents, drinks, products, typeof)
+    context = get_context(contents=contents, drinks=drinks, products=products, typeof=typeof)
     return render(request, "products/products.html", context=context)
 
 
@@ -60,11 +59,9 @@ def get_context(contents=None, drinks=None, products=None, typeof=None, product=
 
 
 def showSingleProduct(request, pk):  # show informations about one product
-    global profile
     product = Product.objects.get(id=pk)
     type1 = product.typeof
-    products = Product.objects.filter(
-        typeof=type1).exclude(title=product.title)
+    products = Product.objects.filter(typeof=type1).exclude(title=product.title)
     drinks = Drink.objects.all()
     context = get_context(products=products, product=product, drinks=drinks)
     return render(request, "products/single_product.html", context=context)
@@ -82,7 +79,6 @@ def deleteProductsFromJS(request):  # deleting products from list
 
 # showing the products containing search string in name or in its containings
 def productsSearch(request):
-    global profile
     search = request.POST.get("search", "")
     allProducts = Product.objects.all()
     drinks = Drink.objects.all()
@@ -101,14 +97,13 @@ def productsSearch(request):
 
 
 def productsSort(request, typeof):  # showing the products which containg some tags
-    global profile
     drinks = Drink.objects.all()
     contents = Content.objects.filter(typeof=typeof)
     allProducts = Product.objects.filter(typeof=typeof)
     requestResult = list(request.POST.items())
     products = []
     enabledTags = []
-    for tagTitle, enabled in requestResult:
+    for tagTitle, _ in requestResult:
         enabledTags.append(tagTitle)
     for product in allProducts:
         for tagTitle, enabled in requestResult:
@@ -161,11 +156,10 @@ def sendEmail(receiverEmail):  # sending the email
     message = MIMEMultipart()
     message['From'] = sender
     message['To'] = receiver
-    message['Subject'] = 'Restaurant Cataleya - comanda inregistrata'
+    message['Subject'] = '[Restaurant Cataleya] Comanda inregistrata'
 
     message.attach(MIMEText(body, 'plain'))
 
-    global pdfResponseDownload
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S')
     pdfname = ("factura-comanda-" + timestamp + ".pdf").replace(":", "-")
@@ -182,8 +176,7 @@ def sendEmail(receiverEmail):  # sending the email
     binary_pdf = open(pdfname, 'rb')
 
     payload = MIMEBase('application', 'octate-stream', Name=pdfname)
-    # payload = MIMEBase('application', 'pdf', Name=pdfname)
-    payload.set_payload((binary_pdf).read())
+    payload.set_payload(binary_pdf.read())
 
     # enconding the binary into base64
     encoders.encode_base64(payload)
@@ -313,12 +306,12 @@ def handleRequestFromJs(instruction, request):
     data = {}
     if request.method == "POST":
         foodProducts = dict(request.POST)["market[]"]
-        for id in foodProducts:
+        for product_id in foodProducts:
             try:
-                prod = Product.objects.get(id=id)
+                prod = Product.objects.get(id=product_id)
                 intermediateList.append(prod)
             except:
-                drink = Drink.objects.get(id=id)
+                drink = Drink.objects.get(id=product_id)
                 intermediateList.append(drink)
         if instruction == "delete":
             productsList.remove(intermediateList[0])
@@ -326,9 +319,8 @@ def handleRequestFromJs(instruction, request):
             productsList.extend(intermediateList)
         productsDict = dict(Counter(productsList))
     elif request.method == "GET":
-        numberOfProducts = len(productsList)
         data = {
-            "numberOfProducts": numberOfProducts,
+            "numberOfProducts": len(productsList),
         }
     return JsonResponse(data)
 

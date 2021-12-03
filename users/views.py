@@ -1,8 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
-import products.views
 
+import products.views
 from users.models import Bill, Profile
 
 profile_logged_in = None
@@ -134,26 +133,26 @@ def trim(string):
 
 def createBill(request, bill_number):
     bill = Bill.objects.get(bill_number=bill_number)
-    address, deliveryCost, email, name, phone, productsString, timestamp, totalPrice = get_bill_data(bill)
+    info, productsString = get_bill_data(bill)
     productsToShow = render_products_from_string(productsString)
-    context = get_bill_context(address, deliveryCost, email, name, phone, productsToShow, timestamp, totalPrice)
+    context = get_bill_context(info, productsToShow)
     pdf = products.views.render_to_pdf('bill.html', context)
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{bill}.pdf"'
     return response
 
 
-def get_bill_context(address, deliveryCost, email, name, phone, productsToShow, timestamp, totalPrice):
+def get_bill_context(info, productsToShow):
     context = {
         'pagesize': 'A4',
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
+        'name': info[3],
+        'address': info[0],
+        'phone': info[4],
+        'email': info[2],
         'products': productsToShow,
-        'productsPrice': totalPrice,
-        "deliveryCost": deliveryCost,
-        'timestamp': timestamp,
+        'productsPrice': info[6],
+        "deliveryCost": info[1],
+        'timestamp': info[5],
     }
     return context
 
@@ -169,7 +168,7 @@ def get_bill_data(bill):
     if totalPrice > 60:
         deliveryCost = 0
     productsString = bill.products
-    return address, deliveryCost, email, name, phone, productsString, timestamp, totalPrice
+    return [address, deliveryCost, email, name, phone, timestamp, totalPrice], productsString
 
 
 def render_products_from_string(productsString):
