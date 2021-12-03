@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Restaurant Cataleya - login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script
-      src="https://kit.fontawesome.com/5a450054d9.js"
-      crossorigin="anonymous"
+            src="https://kit.fontawesome.com/5a450054d9.js"
+            crossorigin="anonymous"
     ></script>
-  </head>
-  <body>
-    <div class="container" id="container">
-      <div class="form-container sign-up-container">
+</head>
+<body>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
         <form action="{% url 'create-user' %}" method="POST">
-          {% csrf_token %}
-          <h1>Creaza un cont</h1>
-          <input type="text" placeholder="Nume utilizator" name="username" />
-          <input type="email" placeholder="Email" name="email" />
-          <input type="password" placeholder="Parola" name="password" />
-          <button type="submit">Creare</button>
+            {% csrf_token %}
+            <h1>Creaza un cont</h1>
+            <input type="text" placeholder="Nume utilizator" name="username"/>
+            <input type="email" placeholder="Email" name="email"/>
+            <input type="password" placeholder="Parola" name="password"/>
+            <button type="submit">Creare</button>
         </form>
-      </div>
-      <div class="form-container sign-in-container">
-        <form action="{% url 'login-user' %}" method="POST">
-          {% csrf_token %}
-          <h1>Conecteaza-te</h1>
-          <input type="text" placeholder="Nume utilizator" name="username" />
-          <input type="password" placeholder="Parola" name="password" />
-          <a href="#">Ai uitat parola?</a>
-          <button type="submit">Logare</button>
-        </form>
-      </div>
-      <div class="overlay-container">
-        <div class="overlay">
-          <div class="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>
-              To keep connected with us please login with your personal info
-            </p>
-            <button class="ghost" id="signIn">Conectare</button>
-          </div>
-          <div class="overlay-panel overlay-right">
-            <h1>Hello there!</h1>
-            <p>Enter your personal details and start journey with us</p>
-            <button class="ghost" id="signUp">Creare cont</button>
-          </div>
-        </div>
-      </div>
     </div>
+    <div class="form-container sign-in-container">
+        <form action="{% url 'login-user' %}" method="POST">
+            {% csrf_token %}
+            <h1>Conecteaza-te</h1>
+            <input type="text" placeholder="Nume utilizator" name="username"/>
+            <input type="password" placeholder="Parola" name="password"/>
+            <a href="#">Ai uitat parola?</a>
+            <button type="submit">Logare</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Bine ai venit!</h1>
+                <p>Enter your personal details and start journey with us</p>
+                <button class="ghost" id="signUp">Creare cont</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Bine ai revenit!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost" id="signIn">Conectare</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-      <!-- Trigger the modal with a button -->
-      <button type="button" id="login-modal" class="btn btn-info btn-lg" style="visibility: hidden !important;" data-toggle="modal" data-target="#myModal">Open Modal</button>
-    
-      <!-- Modal -->
-      <div class="modal fade" id="myModal" role="dialog" >
-        <div class="modal-dialog">
-        
-          <!-- Modal content-->
-          <div class="modal-content">
+<!-- Trigger the modal with a button -->
+<button type="button" id="login-modal" class="btn btn-info btn-lg" style="visibility: hidden !important;"
+        data-toggle="modal" data-target="#myModal">Open Modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">ATENTIE!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ATENTIE!</h4>
             </div>
             <div class="modal-body">
-              <p>{{message}}</p>
+                <p>{{message}}</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">inchide</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">inchide</button>
             </div>
-          </div>
-          
         </div>
-      </div>
-  </body>
-  <script>
+
+    </div>
+</div>
+</body>
+<script>
     const signUpButton = document.getElementById("signUp");
     const signInButton = document.getElementById("signIn");
     const container = document.getElementById("container");
@@ -96,8 +96,10 @@
     if(message.length!==0){
       openModalButton.click()
     }
-  </script>
-  <style>
+
+
+</script>
+<style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
     * {
@@ -353,5 +355,7 @@
       color: #3c97bf;
       text-decoration: none;
     }
-  </style>
+
+
+</style>
 </html>
