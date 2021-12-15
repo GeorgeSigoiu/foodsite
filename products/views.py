@@ -17,8 +17,6 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-# Create your views here.
-
 productsDict = []
 productsList = []
 pdfResponseDownload = None
@@ -137,8 +135,10 @@ def downloadBill(request):  # downloading the bill and sending email
 
 def sendEmail(receiverEmail):  # sending the email
     body = '''Buna ziua,
+    
     Va multumim pentru comanda efectuata la noi!
     Atasata aveti factura.
+    
     O zi frumoasa,
     Echipa G.G.
     '''
@@ -220,7 +220,7 @@ def resetProductList():
     productsDict = []
 
 
-def createBill(requestDict):  # creates the bill
+def createBill(requestDict):  # creates the bill in pdf format
     address, email, name, phone, totalPrice, deliveryCost = get_bill_information(requestDict)
     global productsDict
     global rendered_string_from_html
@@ -248,13 +248,12 @@ def createBill(requestDict):  # creates the bill
     return response
 
 
-def addBillToDatabase(requestDict):
+def addBillToDatabase(requestDict):  # creates the bill objects and then saves in database
     address, email, name, phone, totalPrice, deliveryCost = get_bill_information(requestDict)
     global productsDict
     products = ""
     for product, number in productsDict.items():
-        products += str(product).replace(" ", "-") + " " + str(number) + " " + \
-                    str(product.price * number) + ", "
+        products += str(product).replace(" ", "-") + " " + str(number) + " " + str(product.price * number) + ", "
     bill = Bill.Builder() \
         .set_name(name) \
         .set_email(email) \
@@ -267,9 +266,8 @@ def addBillToDatabase(requestDict):
     return bill
 
 
-def get_bill_information(requestDict):
-    name = trimString(requestDict["firstname"]) + \
-           " " + trimString(requestDict["surname"])
+def get_bill_information(requestDict):  # split requestDict in more variables
+    name = trimString(requestDict["firstname"]) + " " + trimString(requestDict["surname"])
     address = trimString(requestDict["deliveryAddress"])
     phone = trimString(requestDict["phone"])
     email = trimString(requestDict["email"])
@@ -287,7 +285,7 @@ def trimString(string):
     return result
 
 
-def render_to_pdf(template_src, context_dict):
+def render_to_pdf(template_src, context_dict):  # creates a pdf from html page
     template = get_template(template_src)
     context = dict(context_dict)
     html = template.render(context)
@@ -299,7 +297,7 @@ def render_to_pdf(template_src, context_dict):
     return HttpResponse("Error generating PDF file")
 
 
-def handleRequestFromJs(instruction, request):
+def handleRequestFromJs(instruction, request):  # gets the product list from js
     global productsDict
     global productsList
     intermediateList = []
@@ -325,8 +323,7 @@ def handleRequestFromJs(instruction, request):
     return JsonResponse(data)
 
 
-# searching for products which contains a string in their names
-def getProductsByTitle(search, allProducts):
+def getProductsByTitle(search, allProducts):  # searching for products which contains a string in their names
     result = []
     for product in allProducts:
         if search in product.title.lower():
@@ -334,8 +331,7 @@ def getProductsByTitle(search, allProducts):
     return result
 
 
-# searching from products which contains some tags
-def getProductsByContent(search, allProducts):
+def getProductsByContent(search, allProducts):  # searching from products which contains some tags
     result = []
     for prod in allProducts:
         content = prod.content.filter(title__contains=search)

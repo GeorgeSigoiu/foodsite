@@ -100,8 +100,7 @@ class Profile(models.Model):
     bills = models.ManyToManyField('Bill', blank=True)
     phone = models.CharField(max_length=200, blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
-    id = models.UUIDField(default=uuid.uuid4, unique=True,
-                          primary_key=True, editable=False)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     @classmethod
     def createInstance(cls, builder):

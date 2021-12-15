@@ -2,7 +2,6 @@ from django.conf.urls import url
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     path('products/<str:typeof>', views.showProducts, name="products"),
     path('product/<str:pk>', views.showSingleProduct, name="single-product"),

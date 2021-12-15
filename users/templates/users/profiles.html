@@ -16,11 +16,11 @@
                     <div class="form-group">
                         <div class="form-inline">
                             <div class="form-group form-animate">
-                                <label for="firstname" >Prenume:</label><br>
+                                <label for="firstname">Prenume:</label><br>
                                 <input type="text" class="form-control form-select" name="firstname" placeholder="Prenume" value="{{profile.firstname}}" readonly>
                             </div>
                             <div class="form-group form-animate">
-                                <label for="surname" >Nume:</label><br>
+                                <label for="surname">Nume:</label><br>
                                 <input type="text" class="form-control form-select" name="surname" placeholder="Nume" value="{{profile.surname}}" readonly>
                             </div>
                         </div>
@@ -30,12 +30,12 @@
                         <input type="text" class="form-control form-select" style="max-width: 200px;" name="phone" maxlength="12" size="12" placeholder="Telefon" value="{{profile.phone}}" readonly>
                     </div>
                     <div class="form-group form-animate">
-                        <label for="email"  >Email:</label>
+                        <label for="email">Email:</label>
                         <input type="email" class="form-control form-select" name="email" placeholder="Adresa mail" value="{{profile.email}}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="deliveryAddress">Adresa livrare:</label>
-                        <textarea class="form-control form-select" rows="3" name="address"  placeholder="Adresa de livrare..." readonly>{{profile.address}}</textarea>
+                        <textarea class="form-control form-select" rows="3" name="address" placeholder="Adresa de livrare..." readonly>{{profile.address}}</textarea>
                     </div>
                 </div>
                 <span class="btn btn--main button" id="mod">Modifica datele</span>
@@ -149,6 +149,7 @@
     #save{
         visibility: hidden;
     }
+
 </style>
 <script>
 
@@ -184,5 +185,6 @@
             })
         }
     })
+
 </script>
 {% endblock content %}

@@ -11,7 +11,7 @@
     {% endif %}
 </div>
 
-<div class="container"> 
+<div class="container">
     <div class="row bg-dark">
         {% if "search" not in typeof %}
         <div class="tags-window col-lg-2 color-white">
@@ -27,42 +27,47 @@
                     </div>
                     {% endfor %}
                 </div>
-                <input id="submit-sorting-products" class="btn btn--main" style="margin-top: 1rem;visibility: hidden;" type="submit" value="Cauta">
+                <input id="submit-sorting-products" class="btn btn--main" style="margin-top: 1rem;visibility: hidden;"
+                       type="submit" value="Cauta">
             </form>
         </div>
         {% endif %}
         {% if 'search' not in typeof %}
         <div class="col-lg-10">
-        {% else %}
-        <div class="col-lg-12">
-        {% endif %}
-            <div class="products-window row">
-            {% if productsNotFound %}
-                <h2 class="products-not-found"">{{productsNotFound}}</h2>
-             {% endif %}
-            {% for product in products %}
-                <div class="col-lg-3">
-                    <div class="card" style="height: 350px;">
-                        <a href="{% url 'single-product' product.id %}"><img class="avatar avatar--lg" src="{{product.featured_image.url}}" /></a>
-                        <div class="card__body">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a href="{% url 'single-product' product.id %}">{{product.title}}</a></h4>
-                                    <p>Gramaj: {{product.quantity}} gr</p>
-                                    <p>Pret: {{product.price}} ron</p>
-                                    <button class="btn-add-cart-food btn btn--main--outline" id="{{product.id}}">Adauga in cos</button>
+            {% else %}
+            <div class="col-lg-12">
+                {% endif %}
+                <div class="products-window row">
+                    {% if productsNotFound %}
+                    <h2 class="products-not-found">{{productsNotFound}}</h2>
+                    {% endif %}
+                    {% for product in products %}
+                    <div class="col-lg-3">
+                        <div class="card" style="height: 350px;">
+                            <a href="{% url 'single-product' product.id %}"><img class="avatar avatar--lg"
+                                                                                 src="{{product.featured_image.url}}"/></a>
+                            <div class="card__body">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><a href="{% url 'single-product' product.id %}">{{product.title}}</a>
+                                        </h4>
+                                        <p>Gramaj: {{product.quantity}} gr</p>
+                                        <p>Pret: {{product.price}} ron</p>
+                                        <button class="btn-add-cart-food btn btn--main--outline" id="{{product.id}}">
+                                            Adauga in cos
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
             </div>
         </div>
     </div>
-</div>
-{% include 'products/drinks_carousel.html' %}
-<script>
+    {% include 'products/drinks_carousel.html' %}
+    <script>
     const checkboxes = document.querySelectorAll("#sorting-products-tags .checkbox label")
 
     if (checkboxes) {
@@ -89,5 +94,8 @@
         }
     }
     
-</script>
-{% endblock content %}
+
+
+
+    </script>
+    {% endblock content %}

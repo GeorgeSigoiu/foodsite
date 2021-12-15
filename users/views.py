@@ -11,14 +11,14 @@ def profiles(request):
     return render(request, 'users/profiles.html')
 
 
-def createUser(request):
+def createUser(request):  # creates a new user
     result = dict(request.POST)
     username = trim(result["username"])
     email = trim(result["email"])
     password = trim(result["password"])
     existsUsername = len(Profile.objects.filter(username=username)) > 0
     if existsUsername:
-        return render(request, "login.html", {"message": "Exista deja acest utilizator!"})
+        return render(request, "login.html", {"message": "Exista deja acest utilizator! Incercati din nou."})
     if len(username) == 0 or len(password) == 0 or len(email) == 0:
         return render(request, "login.html",
                       {"message": "Nu se poate crea contul: toate campurile trebuie completate!"})
@@ -31,55 +31,51 @@ def createUser(request):
 
     profile.save()
     login(profile)
-    return redirect("/")
+    return redirect("/")  # redirect to home page
 
 
-def loginUser(request):
+def loginUser(request):  # login the user
     result = dict(request.POST)
     username = trim(result["username"])
     password = trim(result["password"])
     if len(username) == 0 or len(password) == 0:
         return render(request, "login.html", {"message": "Nu au fost completate toate campurile!"})
-    profileExists = False
-    profileUsername = Profile.objects.filter(username=username)
+
+    usernameExists = Profile.objects.filter(username=username)  # first check that username exists
     profile = None
-    if profileUsername:
-        profilePassword = Profile.objects \
+    if usernameExists:
+        passwordExists = Profile.objects \
             .filter(username=username) \
-            .filter(password=password)
-        if profilePassword:
-            profile = profilePassword[0]
-    if profile:
-        profileExists = True
-    if profileExists:
+            .filter(password=password)  # second verify the username has that password
+        if passwordExists:
+            profile = passwordExists[0]
+    if profile:  # if the profile exists
         login(profile)
         return redirect("/")
     else:
         return render(request, "login.html", {"message": "Numele de utilizator sau parola nu sunt corecte!"})
 
 
-def showProfile(request, username):
-    global profile_logged_in
+def showProfile(request, username):  # shows the informations for the current user logged in
     context = {
-        "profile": profile_logged_in,
+        "profile": getProfileLoggedIn(),
         "numberOfProducts": getNumberOfProducts(),
     }
     return render(request, 'users/profiles.html', context)
 
 
-def updatePersonalInfo(request):
-    global profile_logged_in
+def updatePersonalInfo(request):  # modify the personal data
     result = dict(request.POST)
     address, email, firstname, phone, surname = get_information_personal_data(result)
     set_information_personal_data(address, email, firstname, phone, surname)
     context = {
-        "profile": profile_logged_in,
+        "profile": getProfileLoggedIn(),
         "numberOfProducts": getNumberOfProducts(),
     }
     return render(request, 'users/profiles.html', context)
 
 
-def set_information_personal_data(address, email, firstname, phone, surname):
+def set_information_personal_data(address, email, firstname, phone, surname):  # save the modifications on personal data
     global profile_logged_in
     profile_logged_in.firstname = firstname
     profile_logged_in.surname = surname
@@ -89,7 +85,7 @@ def set_information_personal_data(address, email, firstname, phone, surname):
     profile_logged_in.save()
 
 
-def get_information_personal_data(result):
+def get_information_personal_data(result):  # gets more variables from one
     firstname = trim(result["firstname"])
     surname = trim(result["surname"])
     phone = trim(result["phone"])
@@ -98,19 +94,19 @@ def get_information_personal_data(result):
     return address, email, firstname, phone, surname
 
 
-def logoutUser(request):
+def logoutUser(request):  # logout the user
     global profile_logged_in
     profile_logged_in = None
     logout()
     return redirect("/")
 
 
-def login(user):
+def login(user):  # set de logged in user
     global profile_logged_in
     profile_logged_in = user
 
 
-def logout():
+def logout():  # log out the user and reset the product list
     global profile_logged_in
     profile_logged_in = None
     products.views.resetProductList()
@@ -131,7 +127,7 @@ def trim(string):
     return result
 
 
-def createBill(request, bill_number):
+def createBill(request, bill_number):  # creates the pdf format bill
     bill = Bill.objects.get(bill_number=bill_number)
     info, productsString = get_bill_data(bill)
     productsToShow = render_products_from_string(productsString)
@@ -142,7 +138,7 @@ def createBill(request, bill_number):
     return response
 
 
-def get_bill_context(info, productsToShow):
+def get_bill_context(info, productsToShow):  # prepare context for rendering into html page
     context = {
         'pagesize': 'A4',
         'name': info[3],
@@ -157,7 +153,7 @@ def get_bill_context(info, productsToShow):
     return context
 
 
-def get_bill_data(bill):
+def get_bill_data(bill):  # return information about bill
     name = bill.name
     address = bill.address
     phone = bill.phone
@@ -171,7 +167,7 @@ def get_bill_data(bill):
     return [address, deliveryCost, email, name, phone, timestamp, totalPrice], productsString
 
 
-def render_products_from_string(productsString):
+def render_products_from_string(productsString):  # convert string into product list
     products = productsString.split(", ")
     productsList = []
     for product in products:
@@ -188,7 +184,7 @@ def render_products_from_string(productsString):
     return productsList
 
 
-class MyProduct:
+class MyProduct:  # class created for easily rendering products from a string
     def __init__(self, title, price):
         self.title = title
         self.price = price

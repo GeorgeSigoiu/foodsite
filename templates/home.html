@@ -10,16 +10,19 @@
             <div class="buttons-order">
                 <div style="margin: 0 auto;">
                     <div class="block">
-                        <a href="{% url 'products-sort' 'pizza' %}"><i class="hovicon effect-3 sub-a"
-                                                                       id="pizza-btn"><br>Comanda acum</i></a>
+                        <a href="{% url 'products-sort' 'pizza' %}">
+                            <i class="hovicon effect-3 sub-a" id="pizza-btn"><br>Comanda acum</i>
+                        </a>
                     </div>
                     <div class="block">
-                        <a href="{% url 'products-sort' 'burger' %}"><i class="hovicon effect-3 sub-a"
-                                                                        id="burger-btn"><br>Comanda acum</i></a>
+                        <a href="{% url 'products-sort' 'burger' %}">
+                            <i class="hovicon effect-3 sub-a" id="burger-btn"><br>Comanda acum</i>
+                        </a>
                     </div>
                     <div class="block">
-                        <a href="{% url 'products-sort' 'salata' %}"><i class="hovicon effect-3 sub-a"
-                                                                        id="salad-btn"><br>Comanda acum</i></a>
+                        <a href="{% url 'products-sort' 'salata' %}">
+                            <i class="hovicon effect-3 sub-a" id="salad-btn"><br>Comanda acum</i>
+                        </a>
                     </div>
                 </div>
 
@@ -183,6 +186,8 @@
   }
 }
 
+
+
 </style>
 <script>
 'use strict'
@@ -198,5 +203,7 @@ function typing(){
     }
 }
 typing()
+
+
 </script>
 {% endblock content %}

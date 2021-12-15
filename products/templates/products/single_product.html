@@ -1,67 +1,66 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
 <div class="container container-sg-prod">
-  <div class="product-template">
-    <div>
-      <div class="product-title">
-        {{ product.title }}
-        <div class="title-border-left"></div>
-        <div class="title-border-right"></div>
-      </div>
-      <div style="display: flex">
-        <div class="product-image">
-          <div class="image-div"></div>
-          <!-- <img src="{{product.featured_image.url}}" alt="photo"> -->
-        </div>
+    <div class="product-template">
         <div>
-          <div class="delivery-info">
-            <p><i class="fas fa-phone-alt"></i> Comanda online sau telefonic</p>
-            <p>
-              Intre orele 09:00 si 23:00 (ultima comanda) asteptam comenzile
-              dvs., atat online cat si telefonic 036 4990 sau 0744 215 250
-            </p>
-          </div>
-          <div style="display: flex; align-items: center; position: relative">
-            <span class="quantity-btn">+</span>
-            <input
-              class="sg-prod-input"
-              type="number"
-              min="1"
-              maxlength="3"
-              max="3"
-              value="1"
-            />
-            <span class="quantity-btn">-</span>
-            <span
-              class="btn btn-primary add-to-cart"
-              id="{{product.id}}"
-              style="
+            <div class="product-title">
+                {{ product.title }}
+                <div class="title-border-left"></div>
+                <div class="title-border-right"></div>
+            </div>
+            <div style="display: flex">
+                <div class="product-image">
+                    <div class="image-div"></div>
+                </div>
+                <div>
+                    <div class="delivery-info">
+                        <p><i class="fas fa-phone-alt"></i> Comanda online sau telefonic</p>
+                        <p>
+                            Intre orele 09:00 si 23:00 (ultima comanda) asteptam comenzile
+                            dvs., atat online cat si telefonic 036 4990 sau 0744 215 250
+                        </p>
+                    </div>
+                    <div style="display: flex; align-items: center; position: relative">
+                        <span class="quantity-btn">+</span>
+                        <input
+                                class="sg-prod-input"
+                                type="number"
+                                min="1"
+                                maxlength="3"
+                                max="3"
+                                value="1"
+                        />
+                        <span class="quantity-btn">-</span>
+                        <span
+                                class="btn btn-primary add-to-cart"
+                                id="{{product.id}}"
+                                style="
                 margin-left: 1rem;
                 padding-left: 3rem !important;
                 padding-right: 3rem !important;
               "
-              >Adauga in cos</span
-            >
-            <div class="alert alert-sg-prod">
-              <p class="alert__message"></p>
-              <button
-                class="alert__close"
-                style="transition: all 0s !important"
-              >
-                ⨯
-              </button>
-            </div>
-          </div>
+                        >Adauga in cos</span
+                        >
+                        <div class="alert alert-sg-prod">
+                            <p class="alert__message"></p>
+                            <button
+                                    class="alert__close"
+                                    style="transition: all 0s !important"
+                            >
+                                ⨯
+                            </button>
+                        </div>
+                    </div>
 
-          <div class="primary-attr">
-            <p style="color: black">Pret: {{product.price}} lei</p>
-            <p style="color: black">Gramaj: {{product.quantity}} gr</p>
-          </div>
-        </div>
-      </div>
-      <div
-        class="sg-prod-content-tags"
-        style="
+                    <div class="primary-attr">
+                        <p style="color: black">Pret: {{product.price}} lei</p>
+                        <p style="color: black">Gramaj: {{product.quantity}} gr</p>
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="sg-prod-content-tags"
+                    style="
           margin-top: 2rem;
           margin-left: 2rem;
           background: transparent;
@@ -70,77 +69,77 @@
           border: 2px solid rgb(11, 155, 212);
           padding: 1rem;
         "
-      >
-        <h3 style="margin-left: 3rem; margin-top: 0 !important; color: #333">
-          Ingrediente:
-        </h3>
-        <div class="tags-container">
-          {% for tag in product.content.all %}
-          <span class="tag tag--outline" style="cursor: default !important">
+            >
+                <h3 style="margin-left: 3rem; margin-top: 0 !important; color: #333">
+                    Ingrediente:
+                </h3>
+                <div class="tags-container">
+                    {% for tag in product.content.all %}
+                    <span class="tag tag--outline" style="cursor: default !important">
             <small style="font-size: 14px">{{tag.title}}</small>
           </span>
-          {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="same-type-food-carousel">
-      <div class="same-type-food-arrow">
-        <i class="fas fa-chevron-up"></i>
-      </div>
-      <div class="same-type-food-container">
-        <div id="moving-container">
-          {% for prod in products %}
-          <div
-            class="card card--white"
-            style="min-width: 270px; padding: 0 !important"
-          >
-            <div class="card__body" style="padding: 0 !important">
-              <div>
-                <h3
-                  style="
+        <div class="same-type-food-carousel">
+            <div class="same-type-food-arrow">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="same-type-food-container">
+                <div id="moving-container">
+                    {% for prod in products %}
+                    <div
+                            class="card card--white"
+                            style="min-width: 270px; padding: 0 !important"
+                    >
+                        <div class="card__body" style="padding: 0 !important">
+                            <div>
+                                <h3
+                                        style="
                     font-size: 18px;
                     margin: 0 !important;
                     text-align: center;
                   "
-                >
-                  <a href="{% url 'single-product' prod.id %}"
-                    >{{prod.title}}</a
-                  >
-                </h3>
-              </div>
-              <div
-                style="
+                                >
+                                    <a href="{% url 'single-product' prod.id %}"
+                                    >{{prod.title}}</a
+                                    >
+                                </h3>
+                            </div>
+                            <div
+                                    style="
                   display: flex;
                   align-items: center;
                   justify-content: space-evenly;
                 "
-              >
-                <a href="{% url 'single-product' prod.id %}"
-                  ><img
-                    src="{{prod.featured_image.url}}"
-                    alt="photo"
-                    style="
+                            >
+                                <a href="{% url 'single-product' prod.id %}"
+                                ><img
+                                        src="{{prod.featured_image.url}}"
+                                        alt="photo"
+                                        style="
                       max-width: 100px;
                       aspect-ratio: 1;
                       margin: 0 !important;
                       margin-right: 1rem;
                     "
-                /></a>
-                <p>
-                  Pret: {{prod.price}} lei <br />
-                  Gramaj: {{prod.quantity}} gr
-                </p>
-              </div>
+                                /></a>
+                                <p>
+                                    Pret: {{prod.price}} lei <br/>
+                                    Gramaj: {{prod.quantity}} gr
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-          </div>
-          {% endfor %}
+            <div class="same-type-food-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </div>
-      </div>
-      <div class="same-type-food-arrow">
-        <i class="fas fa-chevron-down"></i>
-      </div>
     </div>
-  </div>
 </div>
 {% include 'products/drinks_carousel.html' %}
 <script>
@@ -150,5 +149,7 @@
 
   document.querySelector(".product-image .image-div").style.background =
     backgroundImage;
+
+
 </script>
 {% endblock content %}
