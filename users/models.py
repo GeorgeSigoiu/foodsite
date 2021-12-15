@@ -6,6 +6,9 @@ from django.db import models
 
 
 class Bill(models.Model):
+    class Meta:
+        ordering = ['created_at']
+
     class Builder:
         def set_address(self, address):
             self.address = address
