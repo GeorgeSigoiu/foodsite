@@ -163,7 +163,7 @@ def sendEmail(receiverEmail):  # sending the email
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S')
     pdfname = ("factura-comanda-" + timestamp + ".pdf").replace(":", "-")
-    resultFile = open(pdfname, "w+b")
+    resultFile = open("facturi_pdf/"+pdfname, "w+b")
 
     # convert HTML to PDF
     global rendered_string_from_html
@@ -173,7 +173,7 @@ def sendEmail(receiverEmail):  # sending the email
     resultFile.close()
 
     # open the file in bynary
-    binary_pdf = open(pdfname, 'rb')
+    binary_pdf = open("facturi_pdf/"+pdfname, 'rb')
 
     payload = MIMEBase('application', 'octate-stream', Name=pdfname)
     payload.set_payload(binary_pdf.read())
